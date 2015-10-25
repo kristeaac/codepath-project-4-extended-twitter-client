@@ -1,0 +1,45 @@
+package com.codepath.apps.twitter.models;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Tweet {
+    private Long id;
+    private String text;
+    @JsonProperty("created_at")
+    private String createdAt;
+    private TwitterUser user;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public TwitterUser getUser() {
+        return user;
+    }
+
+    public void setUser(TwitterUser user) {
+        this.user = user;
+    }
+}
