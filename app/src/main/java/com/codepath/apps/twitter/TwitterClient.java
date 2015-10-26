@@ -7,6 +7,7 @@ import org.scribe.builder.api.TwitterApi;
 import android.content.Context;
 
 import com.codepath.apps.twitter.models.Tweet;
+import com.codepath.apps.twitter.models.TwitterUser;
 import com.codepath.oauth.OAuthBaseClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,8 +62,30 @@ public class TwitterClient extends OAuthBaseClient {
 			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 				ObjectMapper mapper = new ObjectMapper();
 				try {
-					List<Tweet> tweets = mapper.readValue(responseBody, new TypeReference<List<Tweet>>() {});
+					List<Tweet> tweets = mapper.readValue(responseBody, new TypeReference<List<Tweet>>() {
+					});
 					handler.onSuccess(tweets);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
+	public void getProfile(final TwitterUserResponseHandler handler) {
+		String apiUrl = getApiUrl("account/verify_credentials.json");
+		getClient().get(apiUrl, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					TwitterUser user = mapper.readValue(responseBody, TwitterUser.class);
+					handler.onSuccess(user);
 				} catch (IOException e) {
 					handler.onFailure(e);
 				}
@@ -78,6 +101,15 @@ public class TwitterClient extends OAuthBaseClient {
 	public interface TweetResponseHandler {
 
 		void onSuccess(List<Tweet> tweets);
+
+		void onFailure(Throwable error);
+
+	}
+
+	public interface TwitterUserResponseHandler {
+
+		void onSuccess(TwitterUser user);
+
 		void onFailure(Throwable error);
 
 	}

@@ -42,7 +42,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
         tvUserName.setText(user.getName());
         TextView tvUserScreenName = (TextView) convertView.findViewById(R.id.tvUserScreenName);
-        tvUserScreenName.setText(user.getScreenName());
+        tvUserScreenName.setText("@" + user.getScreenName());
         TextView tvCreatedAt = (TextView) convertView.findViewById(R.id.tvCreatedAt);
         try {
             tvCreatedAt.setText(PRETTY_TIME.format(FORMATTER.parse(tweet.getCreatedAt())));

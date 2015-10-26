@@ -3,6 +3,7 @@ package com.codepath.apps.twitter.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +15,7 @@ import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
 import com.codepath.apps.twitter.adapters.TweetsAdapter;
+import com.codepath.apps.twitter.fragments.ComposeTweetFragment;
 import com.codepath.apps.twitter.listeners.EndlessScrollListener;
 import com.codepath.apps.twitter.models.Tweet;
 
@@ -39,10 +41,12 @@ public class TimelineActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                ComposeTweetFragment composeTweetFragment = new ComposeTweetFragment();
+                composeTweetFragment.show(fragmentManager, "COMPOSE_TWEET");
             }
         });
+
         setupSwitchRefreshLayout();
         lvTweets = (ListView) findViewById(R.id.lvTweets);
         tweets = new ArrayList<>();
