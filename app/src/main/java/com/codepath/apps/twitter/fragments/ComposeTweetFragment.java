@@ -24,7 +24,7 @@ import com.squareup.picasso.Picasso;
 
 public class ComposeTweetFragment extends DialogFragment {
     private static final int MAX_CHARS = 140;
-    public static final String TAG = "COMPOSE_TWEET";
+    private static final String TAG = "COMPOSE_TWEET";
     private TwitterClient client;
     private TextView tvCharsLeft;
     private EditText etTweetText;

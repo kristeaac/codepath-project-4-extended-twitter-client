@@ -2,7 +2,6 @@ package com.codepath.apps.twitter.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -52,7 +51,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         setupSwitchRefreshLayout();
         lvTweets = (ListView) findViewById(R.id.lvTweets);
         tweets = new ArrayList<>();
-        aTweets = new TweetsAdapter(getApplicationContext(), tweets);
+        aTweets = new TweetsAdapter(this, tweets);
         lvTweets.setAdapter(aTweets);
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override

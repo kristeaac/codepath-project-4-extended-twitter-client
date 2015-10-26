@@ -51,10 +51,11 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
+    <com.codepath.apps.twitter.views.LinkifiedTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Don&apos;t Have a Cow, Man!"
+        android:autoLink="all"
         android:id="@+id/tvTweetText"
         android:layout_below="@+id/tvUserName"
         android:layout_toRightOf="@+id/ivUserPhoto"
