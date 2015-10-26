@@ -9,6 +9,8 @@ public class TwitterUser {
     private String name;
     @JsonProperty("profile_image_url")
     private String profileImageUrl;
+    @JsonProperty("screen_name")
+    private String screenName;
 
     public Long getId() {
         return id;
@@ -34,4 +36,11 @@ public class TwitterUser {
         this.profileImageUrl = profileImageUrl;
     }
 
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
 }

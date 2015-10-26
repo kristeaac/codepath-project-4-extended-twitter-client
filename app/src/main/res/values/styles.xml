@@ -10,7 +10,9 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#89000000</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
