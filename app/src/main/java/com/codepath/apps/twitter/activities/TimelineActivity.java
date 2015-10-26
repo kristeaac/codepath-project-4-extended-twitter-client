@@ -14,14 +14,10 @@ import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
 import com.codepath.apps.twitter.adapters.TweetsAdapter;
+import com.codepath.apps.twitter.listeners.EndlessScrollListener;
 import com.codepath.apps.twitter.models.Tweet;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.apache.http.Header;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,33 +48,56 @@ public class TimelineActivity extends AppCompatActivity {
         tweets = new ArrayList<>();
         aTweets = new TweetsAdapter(getApplicationContext(), tweets);
         lvTweets.setAdapter(aTweets);
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                Long sinceId = getOldestTweetId();
+                client.getOlderHomeTimeline(new TwitterClient.TweetResponseHandler() {
+                    @Override
+                    public void onSuccess(List<Tweet> tweets) {
+                        aTweets.addAll(tweets.isEmpty() ? tweets : tweets.subList(1, tweets.size()));
+                    }
+
+                    @Override
+                    public void onFailure(Throwable error) {
+                        logError(error);
+                    }
+                }, sinceId);
+                return true;
+            }
+        });
         client = TwitterApplication.getRestClient();
         populateTimeline();
     }
 
+    private Long getOldestTweetId() {
+        if (tweets.size() == 0) {
+            return 1L;
+        } else {
+            Tweet tweet = tweets.get(tweets.size() - 1);
+            return tweet.getId();
+        }
+    }
+
     private void populateTimeline() {
-        client.getHomeTimeline(new AsyncHttpResponseHandler() {
+        client.getHomeTimeline(new TwitterClient.TweetResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                ObjectMapper mapper = new ObjectMapper();
-                try {
-                    List<Tweet> tweets = mapper.readValue(responseBody, new TypeReference<List<Tweet>>() {
-                    });
-                    aTweets.clear();
-                    TimelineActivity.this.tweets.addAll(tweets);
-                    aTweets.notifyDataSetChanged();
-                    swipeContainer.setRefreshing(false);
-                    Log.d("TIMELINE", "Tweets: " + tweets.size());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            public void onSuccess(List<Tweet> tweets) {
+                aTweets.clear();
+                TimelineActivity.this.tweets.addAll(tweets);
+                aTweets.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("TIMELINE", "failure!");
+            public void onFailure(Throwable error) {
+                logError(error);
             }
         });
+    }
+
+    private void logError(Throwable error) {
+        Log.d("TIMELINE", "Failed to retrieve tweets", error);
     }
 
     private void setupSwitchRefreshLayout() {

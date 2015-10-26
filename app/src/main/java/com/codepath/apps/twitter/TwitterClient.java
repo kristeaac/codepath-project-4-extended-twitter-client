@@ -1,13 +1,20 @@
 package com.codepath.apps.twitter;
 
+import org.apache.http.Header;
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
 
 import android.content.Context;
 
+import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import java.io.IOException;
+import java.util.List;
 
 /*
  * 
@@ -32,15 +39,47 @@ public class TwitterClient extends OAuthBaseClient {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
 	}
 
-	/**
-	 * GET statuses/home_timeline.json
-	 */
-	public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+	public void getHomeTimeline(TweetResponseHandler handler) {
+		getNewerHomeTimeline(handler, 1L);
+	}
+
+	public void getNewerHomeTimeline(final TweetResponseHandler handler, Long sinceId) {
+		getHomeTimeline(handler, sinceId, "since_id");
+	}
+
+	public void getOlderHomeTimeline(final TweetResponseHandler handler, Long maxId) {
+		getHomeTimeline(handler, maxId, "max_id");
+	}
+
+	public void getHomeTimeline(final TweetResponseHandler handler, Long id, String paramName) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
-		params.put("since_id", 1);
-		getClient().get(apiUrl, params, handler);
+		params.put(paramName, id);
+		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					List<Tweet> tweets = mapper.readValue(responseBody, new TypeReference<List<Tweet>>() {});
+					handler.onSuccess(tweets);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
+	public interface TweetResponseHandler {
+
+		void onSuccess(List<Tweet> tweets);
+		void onFailure(Throwable error);
+
 	}
 
 }
