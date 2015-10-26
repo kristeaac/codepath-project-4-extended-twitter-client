@@ -3,6 +3,7 @@ package com.codepath.apps.twitter.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class TimelineActivity extends AppCompatActivity {
     private TweetsAdapter aTweets;
     private List<Tweet> tweets;
     private ListView lvTweets;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class TimelineActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
+        setupSwitchRefreshLayout();
         lvTweets = (ListView) findViewById(R.id.lvTweets);
         tweets = new ArrayList<>();
         aTweets = new TweetsAdapter(getApplicationContext(), tweets);
@@ -62,9 +64,11 @@ public class TimelineActivity extends AppCompatActivity {
                 try {
                     List<Tweet> tweets = mapper.readValue(responseBody, new TypeReference<List<Tweet>>() {
                     });
-                    aTweets.addAll(tweets);
+                    aTweets.clear();
+                    TimelineActivity.this.tweets.addAll(tweets);
+                    aTweets.notifyDataSetChanged();
+                    swipeContainer.setRefreshing(false);
                     Log.d("TIMELINE", "Tweets: " + tweets.size());
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -75,6 +79,21 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("TIMELINE", "failure!");
             }
         });
+    }
+
+    private void setupSwitchRefreshLayout() {
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateTimeline();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
     }
 
 }
