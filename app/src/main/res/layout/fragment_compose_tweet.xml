@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="140"
+        android:text="@string/characters_left"
         android:id="@+id/tvCharsLeft"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
@@ -33,7 +33,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bart Simpson"
+        android:text="@string/user_name"
         android:id="@+id/tvUserName"
         android:textColor="#DD000000"
         android:textSize="16sp"
@@ -45,7 +45,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\@bart_simpson"
+        android:text="@string/user_screen_name"
         android:id="@+id/tvUserScreenName"
         android:layout_below="@+id/tvUserName"
         android:layout_alignLeft="@+id/tvUserName"
@@ -57,7 +57,7 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/etTweetText"
-        android:hint="What's going on?"
+        android:hint="@string/compose_tweet_hint"
         android:layout_below="@+id/ivUserPhoto"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -66,9 +66,10 @@
         android:gravity="top" />
 
     <Button
+        style="@style/Widget.Button.Custom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tweet"
+        android:text="@string/update_status"
         android:id="@+id/btnTweet"
         android:layout_below="@+id/etTweetText"
         android:layout_alignParentRight="true"
