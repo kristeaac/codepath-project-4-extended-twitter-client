@@ -36,7 +36,7 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [X] "Compose" new tweet icon is a floating action button on the timeline
 
 ## Video Walkthrough 
 
@@ -48,7 +48,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-### Clicking links in ListViews resulted in a runtime exception `android.util.AndroidRuntimeException: Calling startActivity() from outside of an Activity context requires the FLAG_ACTIVITY_NEW_TASK flag`
+### Clicking links in ListViews resulted in a runtime exception
 
 After enabling autolink, I was receiving the following error when clicking on any tweets with links inside the timeline's ListView:
  
