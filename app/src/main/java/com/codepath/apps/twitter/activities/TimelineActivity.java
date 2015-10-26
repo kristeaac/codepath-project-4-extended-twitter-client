@@ -57,7 +57,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
                 Long sinceId = getOldestTweetId();
-                client.getOlderHomeTimeline(new TwitterClient.TweetResponseHandler() {
+                client.getOlderHomeTimeline(new TwitterClient.TimelineResponseHandler() {
                     @Override
                     public void onSuccess(List<Tweet> tweets) {
                         aTweets.addAll(tweets.isEmpty() ? tweets : tweets.subList(1, tweets.size()));
@@ -85,7 +85,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
     }
 
     private void populateTimeline() {
-        client.getHomeTimeline(new TwitterClient.TweetResponseHandler() {
+        client.getHomeTimeline(new TwitterClient.TimelineResponseHandler() {
             @Override
             public void onSuccess(List<Tweet> tweets) {
                 aTweets.clear();

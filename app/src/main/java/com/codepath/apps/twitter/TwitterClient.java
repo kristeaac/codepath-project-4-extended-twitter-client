@@ -40,19 +40,19 @@ public class TwitterClient extends OAuthBaseClient {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
 	}
 
-	public void getHomeTimeline(TweetResponseHandler handler) {
+	public void getHomeTimeline(TimelineResponseHandler handler) {
 		getNewerHomeTimeline(handler, 1L);
 	}
 
-	public void getNewerHomeTimeline(final TweetResponseHandler handler, Long sinceId) {
+	public void getNewerHomeTimeline(final TimelineResponseHandler handler, Long sinceId) {
 		getHomeTimeline(handler, sinceId, "since_id");
 	}
 
-	public void getOlderHomeTimeline(final TweetResponseHandler handler, Long maxId) {
+	public void getOlderHomeTimeline(final TimelineResponseHandler handler, Long maxId) {
 		getHomeTimeline(handler, maxId, "max_id");
 	}
 
-	public void getHomeTimeline(final TweetResponseHandler handler, Long id, String paramName) {
+	public void getHomeTimeline(final TimelineResponseHandler handler, Long id, String paramName) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
@@ -115,7 +115,30 @@ public class TwitterClient extends OAuthBaseClient {
 		});
 	}
 
-	public interface TweetResponseHandler {
+	public void getStatus(Long id, final TweetResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/show.json");
+		RequestParams params = new RequestParams();
+		params.put("id", id);
+		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					Tweet tweet = mapper.readValue(responseBody, Tweet.class);
+					handler.onSuccess(tweet);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
+	public interface TimelineResponseHandler {
 
 		void onSuccess(List<Tweet> tweets);
 
@@ -134,6 +157,14 @@ public class TwitterClient extends OAuthBaseClient {
 	public interface StatusUpdateResponseHandler {
 
 		void onSuccess();
+
+		void onFailure(Throwable error);
+
+	}
+
+	public interface TweetResponseHandler {
+
+		void onSuccess(Tweet tweet);
 
 		void onFailure(Throwable error);
 

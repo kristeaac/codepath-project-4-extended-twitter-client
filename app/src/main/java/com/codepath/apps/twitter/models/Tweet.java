@@ -10,6 +10,10 @@ public class Tweet {
     @JsonProperty("created_at")
     private String createdAt;
     private TwitterUser user;
+    @JsonProperty("retweet_count")
+    private int retweetCount;
+    @JsonProperty("favourites_count")
+    private int favoritesCount;
 
     public Long getId() {
         return id;
@@ -41,5 +45,21 @@ public class Tweet {
 
     public void setUser(TwitterUser user) {
         this.user = user;
+    }
+
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public int getFavoritesCount() {
+        return favoritesCount;
+    }
+
+    public void setFavoritesCount(int favoritesCount) {
+        this.favoritesCount = favoritesCount;
     }
 }
