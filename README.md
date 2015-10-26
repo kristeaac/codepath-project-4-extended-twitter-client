@@ -32,7 +32,7 @@ The following **optional** features are implemented:
 The following **bonus** features are implemented:
 
 * [ ] User can see embedded image media within the tweet detail view
-* [ ] Compose tweet functionality is build using modal overlay
+* [X] Compose tweet functionality is build using modal overlay
 
 The following **additional** features are implemented:
 
