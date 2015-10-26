@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,8 +24,11 @@ import com.squareup.picasso.Picasso;
 
 public class ComposeTweetFragment extends DialogFragment {
     private static final int MAX_CHARS = 140;
+    public static final String TAG = "COMPOSE_TWEET";
     private TwitterClient client;
     private TextView tvCharsLeft;
+    private EditText etTweetText;
+    private StatusUpdateListener listener;
 
     @Nullable
     @Override
@@ -33,6 +37,7 @@ public class ComposeTweetFragment extends DialogFragment {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setupUserDetails(view);
         setupCharacterLimit(view);
+        setupTweetButton(view);
         return view;
     }
 
@@ -51,7 +56,7 @@ public class ComposeTweetFragment extends DialogFragment {
 
             @Override
             public void onFailure(Throwable error) {
-                Log.d("COMPOSE_TWEET", "Failed to retrieve user's details", error);
+                Log.d(TAG, "Failed to retrieve user's details", error);
             }
         });
     }
@@ -59,7 +64,7 @@ public class ComposeTweetFragment extends DialogFragment {
     private void setupCharacterLimit(View view) {
         tvCharsLeft = (TextView) view.findViewById(R.id.tvCharsLeft);
         tvCharsLeft.setText(String.valueOf(MAX_CHARS));
-        EditText etTweetText = (EditText) view.findViewById(R.id.etTweetText);
+        etTweetText = (EditText) view.findViewById(R.id.etTweetText);
         etTweetText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(MAX_CHARS)});
         etTweetText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -78,5 +83,39 @@ public class ComposeTweetFragment extends DialogFragment {
                 // Do nothing.
             }
         });
+    }
+
+    public void setupTweetButton(View view) {
+        Button btnTweet = (Button) view.findViewById(R.id.btnTweet);
+        btnTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String status = etTweetText.getText().toString();
+                Log.d(TAG, "status=" + status);
+                client.updateStatus(status, new TwitterClient.StatusUpdateResponseHandler() {
+                    @Override
+                    public void onSuccess() {
+                        if (listener != null) {
+                            listener.onStatusUpdated();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable error) {
+                        Log.d(TAG, "Failed to update status", error);
+                    }
+                });
+            }
+        });
+    }
+
+    public void setListener(StatusUpdateListener listener) {
+        this.listener = listener;
+    }
+
+    public interface StatusUpdateListener {
+
+        void onStatusUpdated();
+
     }
 }

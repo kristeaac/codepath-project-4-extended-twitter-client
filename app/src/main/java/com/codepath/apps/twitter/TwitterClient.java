@@ -98,6 +98,23 @@ public class TwitterClient extends OAuthBaseClient {
 		});
 	}
 
+	public void updateStatus(String status, final StatusUpdateResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/update.json");
+		RequestParams params = new RequestParams();
+		params.put("status", status);
+		getClient().post(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				handler.onSuccess();
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
 	public interface TweetResponseHandler {
 
 		void onSuccess(List<Tweet> tweets);
@@ -109,6 +126,14 @@ public class TwitterClient extends OAuthBaseClient {
 	public interface TwitterUserResponseHandler {
 
 		void onSuccess(TwitterUser user);
+
+		void onFailure(Throwable error);
+
+	}
+
+	public interface StatusUpdateResponseHandler {
+
+		void onSuccess();
 
 		void onFailure(Throwable error);
 

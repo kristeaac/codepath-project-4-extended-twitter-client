@@ -23,12 +23,13 @@ import com.codepath.apps.twitter.models.Tweet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener {
     private TwitterClient client;
     private TweetsAdapter aTweets;
     private List<Tweet> tweets;
     private ListView lvTweets;
     private SwipeRefreshLayout swipeContainer;
+    private ComposeTweetFragment composeTweetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +43,9 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                ComposeTweetFragment composeTweetFragment = new ComposeTweetFragment();
+                composeTweetFragment = new ComposeTweetFragment();
                 composeTweetFragment.show(fragmentManager, "COMPOSE_TWEET");
+                composeTweetFragment.setListener(TimelineActivity.this);
             }
         });
 
@@ -119,4 +121,11 @@ public class TimelineActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onStatusUpdated() {
+        if (composeTweetFragment != null) {
+            composeTweetFragment.dismiss();
+        }
+        populateTimeline();
+    }
 }
