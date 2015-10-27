@@ -1,6 +1,5 @@
 package com.codepath.apps.twitter.activities;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -76,10 +75,11 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
 
     private void setupRetweetButton(final Tweet tweet) {
         final Long tweetId = tweet.getId();
-        ImageView ivRetweet = (ImageView) findViewById(R.id.ivRetweets);
+        final ImageView ivRetweet = (ImageView) findViewById(R.id.ivRetweets);
         if (tweet.isRetweeted()) {
             ivRetweet.setImageResource(R.drawable.ic_twitter_retweet_done);
         } else {
+            ivRetweet.setImageResource(R.drawable.ic_twitter_retweet_default);
             ivRetweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -88,6 +88,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
                         public void onSuccess(Tweet tweet) {
                             TweetDetailsActivity.this.tweet = tweet;
                             tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
+                            ivRetweet.setImageResource(R.drawable.ic_twitter_retweet_done);
                         }
 
                         @Override
