@@ -63,6 +63,9 @@ The solution was simple. I needed to instantiate the ListView's adapter with a r
 
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [Jackson](https://github.com/FasterXML/jackson) - JSON parser
+- [PrettyTime](https://github.com/ocpsoft/prettytime/) - Social style date and time formatting
+- [RoundedImageView](https://github.com/vinc3m1/RoundedImageView) - An ImageView that supports rounded corners
 
 ## License
 
