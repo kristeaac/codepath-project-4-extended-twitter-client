@@ -29,6 +29,7 @@ public class ComposeTweetFragment extends DialogFragment {
     private TextView tvCharsLeft;
     private EditText etTweetText;
     private StatusUpdateListener listener;
+    private Long inReplyToStatusId = null;
 
     @Nullable
     @Override
@@ -92,7 +93,7 @@ public class ComposeTweetFragment extends DialogFragment {
             public void onClick(View v) {
                 String status = etTweetText.getText().toString();
                 Log.d(TAG, "status=" + status);
-                client.updateStatus(status, new TwitterClient.StatusUpdateResponseHandler() {
+                client.replyToStatus(status, inReplyToStatusId, new TwitterClient.StatusUpdateResponseHandler() {
                     @Override
                     public void onSuccess() {
                         if (listener != null) {
@@ -111,6 +112,10 @@ public class ComposeTweetFragment extends DialogFragment {
 
     public void setListener(StatusUpdateListener listener) {
         this.listener = listener;
+    }
+
+    public void setInReplyToStatusId(Long inReplyToStatusId) {
+        this.inReplyToStatusId = inReplyToStatusId;
     }
 
     public interface StatusUpdateListener {

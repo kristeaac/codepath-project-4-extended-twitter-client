@@ -1,10 +1,12 @@
 package com.codepath.apps.twitter.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +14,7 @@ import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
 import com.codepath.apps.twitter.constants.Extras;
+import com.codepath.apps.twitter.fragments.ComposeTweetFragment;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.models.TwitterUser;
 import com.squareup.picasso.Picasso;
@@ -19,10 +22,11 @@ import com.squareup.picasso.Picasso;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class TweetDetailsActivity extends AppCompatActivity {
+public class TweetDetailsActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener {
     private static final String TAG = "TWEET_DETAILS";
     private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
     private static final SimpleDateFormat STRING_FORMATTER = new SimpleDateFormat("hh:mm a - dd MMM yyyy");
+    private ComposeTweetFragment composeTweetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,24 @@ public class TweetDetailsActivity extends AppCompatActivity {
         } catch (ParseException e) {
             Log.d("TWEET", "uh oh", e);
         }
+        ImageView ivReply = (ImageView) findViewById(R.id.ivReply);
+        ivReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                composeTweetFragment = new ComposeTweetFragment();
+                composeTweetFragment.show(fragmentManager, "COMPOSE_TWEET");
+                composeTweetFragment.setListener(TweetDetailsActivity.this);
+            }
+        });
+    }
+
+    @Override
+    public void onStatusUpdated() {
+        if (composeTweetFragment != null) {
+            composeTweetFragment.dismiss();
+        }
+        Log.d("TWEET", "details!");
     }
 
 }
