@@ -38,6 +38,7 @@ The following **additional** features are implemented:
 
 * [X] "Compose" new tweet icon is a floating action button on the timeline
 * [X] User can retweet on tweet details view
+* [X] User can favorite and unfavorite on tweet details view
 
 ## Video Walkthrough 
 

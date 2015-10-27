@@ -12,9 +12,10 @@ public class Tweet {
     private TwitterUser user;
     @JsonProperty("retweet_count")
     private int retweetCount;
-    @JsonProperty("favourites_count")
+    @JsonProperty("favorite_count")
     private int favoritesCount;
     private boolean retweeted;
+    private boolean favorited;
 
     public Long getId() {
         return id;
@@ -70,5 +71,13 @@ public class Tweet {
 
     public void setRetweeted(boolean retweeted) {
         this.retweeted = retweeted;
+    }
+
+    public boolean isFavorited() {
+        return favorited;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
     }
 }

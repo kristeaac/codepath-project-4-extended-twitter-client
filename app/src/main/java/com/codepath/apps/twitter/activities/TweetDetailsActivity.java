@@ -1,5 +1,6 @@
 package com.codepath.apps.twitter.activities;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,8 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
     private static final SimpleDateFormat STRING_FORMATTER = new SimpleDateFormat("hh:mm a - dd MMM yyyy");
     private ComposeTweetFragment composeTweetFragment;
     private TextView tvRetweetCount;
+    private Tweet tweet;
+    private ImageView ivFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +43,10 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
         TwitterApplication.getRestClient().getStatus(id, new TwitterClient.TweetResponseHandler() {
             @Override
             public void onSuccess(Tweet tweet) {
+                TweetDetailsActivity.this.tweet = tweet;
                 populateTweetDetails(tweet);
                 setupRetweetButton(tweet);
-
+                setupFavoriteButton(tweet);
             }
 
             @Override
@@ -64,6 +68,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
                     TwitterApplication.getRestClient().retweet(tweetId, new TwitterClient.TweetResponseHandler() {
                         @Override
                         public void onSuccess(Tweet tweet) {
+                            TweetDetailsActivity.this.tweet = tweet;
                             tvRetweetCount.setText(tweet.getRetweetCount());
                         }
 
@@ -75,6 +80,50 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
                 }
             });
         }
+    }
+
+    public void setupFavoriteButton(final Tweet tweet) {
+        TextView tvFavoritesCount = (TextView) findViewById(R.id.tvFavoritesCount);
+        tvFavoritesCount.setText(String.valueOf(tweet.getFavoritesCount()));
+        ivFavorite = (ImageView) findViewById(R.id.ivFavorites);
+        if (tweet.isFavorited()) {
+            ivFavorite.setImageResource(R.drawable.ic_twitter_favorite_done);
+        } else {
+            ivFavorite.setImageResource(R.drawable.ic_twitter_favorite_default);
+        }
+        ivFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TwitterClient restClient = TwitterApplication.getRestClient();
+                if (!tweet.isFavorited()) {
+                    restClient.favorite(tweet.getId(), new TwitterClient.TweetResponseHandler() {
+                        @Override
+                        public void onSuccess(Tweet tweet) {
+                            TweetDetailsActivity.this.tweet = tweet;
+                            setupFavoriteButton(tweet);
+                        }
+
+                        @Override
+                        public void onFailure(Throwable error) {
+                            Toast.makeText(getApplicationContext(), "Sorry, unable to favorite this tweet!", Toast.LENGTH_LONG);
+                        }
+                    });
+                } else {
+                    restClient.unfavorite(tweet.getId(), new TwitterClient.TweetResponseHandler() {
+                        @Override
+                        public void onSuccess(Tweet tweet) {
+                            TweetDetailsActivity.this.tweet = tweet;
+                            setupFavoriteButton(tweet);
+                        }
+
+                        @Override
+                        public void onFailure(Throwable error) {
+                            Toast.makeText(getApplicationContext(), "Sorry, unable to unfavorite this tweet!", Toast.LENGTH_LONG);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void populateTweetDetails(Tweet tweet) {
