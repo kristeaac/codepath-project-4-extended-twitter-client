@@ -145,7 +145,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
         });
     }
 
-    private void populateTweetDetails(Tweet tweet) {
+    private void populateTweetDetails(final Tweet tweet) {
         TextView tvTweetText = (TextView) findViewById(R.id.tvTweetText);
         tvTweetText.setText(Html.fromHtml(tweet.getText()), TextView.BufferType.SPANNABLE);
         ImageView ivUserPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
@@ -171,8 +171,14 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
             public void onClick(View view) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 composeTweetFragment = new ComposeTweetFragment();
+                composeTweetFragment.setInReplyToStatusId(tweet.getId());
+                composeTweetFragment.setListener(new ComposeTweetFragment.StatusUpdateListener() {
+                    @Override
+                    public void onStatusUpdated() {
+                        composeTweetFragment.dismiss();
+                    }
+                });
                 composeTweetFragment.show(fragmentManager, "COMPOSE_TWEET");
-                composeTweetFragment.setListener(TweetDetailsActivity.this);
             }
         });
     }
@@ -182,7 +188,6 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
         if (composeTweetFragment != null) {
             composeTweetFragment.dismiss();
         }
-        Log.d("TWEET", "details!");
     }
 
 }
