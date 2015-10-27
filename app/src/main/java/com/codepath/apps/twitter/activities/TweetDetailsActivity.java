@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
@@ -27,6 +28,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
     private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
     private static final SimpleDateFormat STRING_FORMATTER = new SimpleDateFormat("hh:mm a - dd MMM yyyy");
     private ComposeTweetFragment composeTweetFragment;
+    private TextView tvRetweetCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,8 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
             @Override
             public void onSuccess(Tweet tweet) {
                 populateTweetDetails(tweet);
+                setupRetweetButton(tweet);
+
             }
 
             @Override
@@ -46,6 +50,31 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
                 Log.e(TAG, "Failed to fetch tweet", error);
             }
         });
+    }
+
+    private void setupRetweetButton(final Tweet tweet) {
+        final Long tweetId = tweet.getId();
+        ImageView ivRetweet = (ImageView) findViewById(R.id.ivRetweets);
+        if (tweet.isRetweeted()) {
+            ivRetweet.setImageResource(R.drawable.ic_twitter_retweet_done);
+        } else {
+            ivRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TwitterApplication.getRestClient().retweet(tweetId, new TwitterClient.TweetResponseHandler() {
+                        @Override
+                        public void onSuccess(Tweet tweet) {
+                            tvRetweetCount.setText(tweet.getRetweetCount());
+                        }
+
+                        @Override
+                        public void onFailure(Throwable error) {
+                            Toast.makeText(getApplicationContext(), "Sorry, unable to retweet this tweet!", Toast.LENGTH_LONG);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private void populateTweetDetails(Tweet tweet) {
@@ -59,7 +88,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
         TextView tvUserScreenName = (TextView) findViewById(R.id.tvUserScreenName);
         tvUserScreenName.setText("@" + user.getScreenName());
         TextView tvCreatedAt = (TextView) findViewById(R.id.tvCreatedAt);
-        TextView tvRetweetCount = (TextView) findViewById(R.id.tvReweetCount);
+        tvRetweetCount = (TextView) findViewById(R.id.tvReweetCount);
         tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
         TextView tvFavoritesCount = (TextView) findViewById(R.id.tvFavoritesCount);
         tvFavoritesCount.setText(String.valueOf(tweet.getFavoritesCount()));

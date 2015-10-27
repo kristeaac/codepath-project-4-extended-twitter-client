@@ -14,6 +14,7 @@ public class Tweet {
     private int retweetCount;
     @JsonProperty("favourites_count")
     private int favoritesCount;
+    private boolean retweeted;
 
     public Long getId() {
         return id;
@@ -61,5 +62,13 @@ public class Tweet {
 
     public void setFavoritesCount(int favoritesCount) {
         this.favoritesCount = favoritesCount;
+    }
+
+    public boolean isRetweeted() {
+        return retweeted;
+    }
+
+    public void setRetweeted(boolean retweeted) {
+        this.retweeted = retweeted;
     }
 }

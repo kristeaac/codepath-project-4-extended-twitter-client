@@ -37,6 +37,7 @@ The following **bonus** features are implemented:
 The following **additional** features are implemented:
 
 * [X] "Compose" new tweet icon is a floating action button on the timeline
+* [X] User can retweet on tweet details view
 
 ## Video Walkthrough 
 

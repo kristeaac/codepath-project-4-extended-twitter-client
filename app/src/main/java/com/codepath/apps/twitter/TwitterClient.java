@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
-	public static final String REST_URL = "https://api.twitter.com/1.1/";
+	public static final String REST_URL = "https://api.twitter.com/1.1";
 	public static final String REST_CONSUMER_KEY = "iLFoYN2ROqxLueDCPPx4hwuhK";
 	public static final String REST_CONSUMER_SECRET = "tt1RGzFwkRBNhwdIMsa5rIzKGs50VZaURIizMtX3fSCSKaaHUI";
 	public static final String REST_CALLBACK_URL = "oauth://cpsimpletweets"; // Change this (here and in manifest)
@@ -127,6 +127,27 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
 		params.put("id", id);
 		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					Tweet tweet = mapper.readValue(responseBody, Tweet.class);
+					handler.onSuccess(tweet);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
+	public void retweet(Long id, final TweetResponseHandler handler) {
+		String apiUrl = getApiUrl(String.format("statuses/retweet/%d.json", id));
+		getClient().post(apiUrl, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 				ObjectMapper mapper = new ObjectMapper();

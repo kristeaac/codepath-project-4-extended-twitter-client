@@ -104,7 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ivRetweets"
-            android:src="@drawable/ic_twitter_retweet_default"
+            android:src="@drawable/btn_retweet"
             android:layout_below="@+id/tvCreatedAt"
             android:layout_toRightOf="@+id/ivReply"
             android:layout_marginRight="4dp"/>
