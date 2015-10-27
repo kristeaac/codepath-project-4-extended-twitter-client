@@ -96,6 +96,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
             @Override
             public void onFailure(Throwable error) {
+                swipeContainer.setRefreshing(false);
                 logError(error);
             }
         });
@@ -125,6 +126,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         if (composeTweetFragment != null) {
             composeTweetFragment.dismiss();
         }
+        lvTweets.smoothScrollToPosition(0);
         populateTimeline();
     }
 }

@@ -81,10 +81,15 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
-        <ImageView
+        <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ivPhoto"
+            android:scaleType="fitCenter"
+            app:riv_corner_radius="5dip"
+            app:riv_mutate_background="true"
+            app:riv_tile_mode="repeat"
+            app:riv_oval="false"
             android:visibility="invisible"
             android:layout_below="@+id/tvTweetText"
             android:layout_centerHorizontal="true"

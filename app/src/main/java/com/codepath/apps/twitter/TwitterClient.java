@@ -32,8 +32,8 @@ import java.util.List;
 public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
 	public static final String REST_URL = "https://api.twitter.com/1.1";
-	public static final String REST_CONSUMER_KEY = "iLFoYN2ROqxLueDCPPx4hwuhK";
-	public static final String REST_CONSUMER_SECRET = "tt1RGzFwkRBNhwdIMsa5rIzKGs50VZaURIizMtX3fSCSKaaHUI";
+	public static final String REST_CONSUMER_KEY = "eGahMTZXjicHA3u0X7sfJj2Qn";
+	public static final String REST_CONSUMER_SECRET = "QqL2OvWOyLFPglBEXggLBhpPEQYzT1wlnO5dylalVs1lXeR63L";
 	public static final String REST_CALLBACK_URL = "oauth://cpsimpletweets"; // Change this (here and in manifest)
 
 	public TwitterClient(Context context) {

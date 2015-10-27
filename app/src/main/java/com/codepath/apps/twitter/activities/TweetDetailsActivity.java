@@ -87,7 +87,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
                         @Override
                         public void onSuccess(Tweet tweet) {
                             TweetDetailsActivity.this.tweet = tweet;
-                            tvRetweetCount.setText(tweet.getRetweetCount());
+                            tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
                         }
 
                         @Override

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.activities.TweetDetailsActivity;
 import com.codepath.apps.twitter.constants.Extras;
+import com.codepath.apps.twitter.models.Entities;
+import com.codepath.apps.twitter.models.Media;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.models.TwitterUser;
 import com.squareup.picasso.Picasso;
@@ -39,6 +41,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
         }
+        setupMedia(convertView, tweet);
         TextView tvTweetId = (TextView) convertView.findViewById(R.id.tvTweetId);
         tvTweetId.setText(String.valueOf(tweet.getId()));
         convertView.setTag(String.valueOf(position));
@@ -72,6 +75,22 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
             }
         });
         return convertView;
+    }
+
+    private void setupMedia(View view, Tweet tweet) {
+        ImageView ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
+        ivPhoto.setImageResource(0);
+        ivPhoto.setVisibility(View.GONE);
+        Entities entities = tweet.getEntities();
+        if (entities != null) {
+            List<Media> mediaList = entities.getMedia();
+            for (Media media : mediaList) {
+                if (media.isPhoto()) {
+                    Picasso.with(getContext()).load(media.getMediaUrl()).into(ivPhoto);
+                    ivPhoto.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
 }
