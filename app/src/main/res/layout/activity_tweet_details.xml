@@ -23,7 +23,8 @@
         android:layout_below="@id/appBarOverlay"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:id="@+id/relativeLayout">
 
         <com.makeramen.roundedimageview.RoundedImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -80,12 +81,22 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivPhoto"
+            android:visibility="invisible"
+            android:layout_below="@+id/tvTweetText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/created_at_long"
             android:id="@+id/tvCreatedAt"
-            android:layout_below="@+id/tvTweetText"
+            android:layout_below="@+id/ivPhoto"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="12dp"/>
@@ -138,5 +149,7 @@
             android:layout_toEndOf="@+id/ivFavorites"/>
 
     </RelativeLayout>
+
+
 
 </RelativeLayout>

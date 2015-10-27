@@ -17,12 +17,15 @@ import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
 import com.codepath.apps.twitter.constants.Extras;
 import com.codepath.apps.twitter.fragments.ComposeTweetFragment;
+import com.codepath.apps.twitter.models.Entities;
+import com.codepath.apps.twitter.models.Media;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.models.TwitterUser;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class TweetDetailsActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener {
     private static final String TAG = "TWEET_DETAILS";
@@ -47,6 +50,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
                 populateTweetDetails(tweet);
                 setupRetweetButton(tweet);
                 setupFavoriteButton(tweet);
+                setupMedia(tweet);
             }
 
             @Override
@@ -54,6 +58,20 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
                 Log.e(TAG, "Failed to fetch tweet", error);
             }
         });
+    }
+
+    private void setupMedia(Tweet tweet) {
+        Entities entities = tweet.getEntities();
+        if (entities != null) {
+            List<Media> mediaList = entities.getMedia();
+            for (Media media : mediaList) {
+                if (media.isPhoto()) {
+                    ImageView ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
+                    Picasso.with(this).load(media.getMediaUrl()).into(ivPhoto);
+                    ivPhoto.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     private void setupRetweetButton(final Tweet tweet) {

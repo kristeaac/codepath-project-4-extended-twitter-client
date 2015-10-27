@@ -16,6 +16,7 @@ public class Tweet {
     private int favoritesCount;
     private boolean retweeted;
     private boolean favorited;
+    private Entities entities;
 
     public Long getId() {
         return id;
@@ -79,5 +80,13 @@ public class Tweet {
 
     public void setFavorited(boolean favorited) {
         this.favorited = favorited;
+    }
+
+    public Entities getEntities() {
+        return entities;
+    }
+
+    public void setEntities(Entities entities) {
+        this.entities = entities;
     }
 }
