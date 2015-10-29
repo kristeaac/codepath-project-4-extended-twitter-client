@@ -9,15 +9,15 @@ Time spent: **X** hours spent in total
 The following **required** functionality is completed:
 
 * [X] The app includes **all required user stories** from Week 3 Twitter Client
-* [ ] User can **switch between Timeline and Mention views using tabs**
-  * [ ] User can view their home timeline tweets.
-  * [ ] User can view the recent mentions of their username.
+* [X] User can **switch between Timeline and Mention views using tabs**
+  * [X] User can view their home timeline tweets.
+  * [X] User can view the recent mentions of their username.
 * [ ] User can navigate to **view their own profile**
   * [ ] User can see picture, tagline, # of followers, # of following, and tweets on their profile.
 * [ ] User can **click on the profile image** in any tweet to see **another user's** profile.
  * [ ] User can see picture, tagline, # of followers, # of following, and tweets of clicked user.
  * [ ] Profile view includes that user's timeline
-* [ ] User can [infinitely paginate](http://guides.codepath.com/android/Endless-Scrolling-with-AdapterViews) any of these timelines (home, mentions, user) by scrolling to the bottom
+* [X] User can [infinitely paginate](http://guides.codepath.com/android/Endless-Scrolling-with-AdapterViews) any of these timelines (home, mentions, user) by scrolling to the bottom
 
 The following **optional** features are implemented:
 
@@ -27,19 +27,13 @@ The following **optional** features are implemented:
 * [ ] User can **"reply" to any tweet on their home timeline**
   * [ ] The user that wrote the original tweet is automatically "@" replied in compose
 * [ ] User can click on a tweet to be **taken to a "detail view"** of that tweet
- * [ ] User can take favorite (and unfavorite) or retweet actions on a tweet
-* [ ] Improve the user interface and theme the app to feel twitter branded
+ * [X] User can take favorite (and unfavorite) or retweet actions on a tweet
+* [X] Improve the user interface and theme the app to feel twitter branded
 * [ ] User can **search for tweets matching a particular query** and see results
 
 The following **bonus** features are implemented:
 
 * [ ] User can view their direct messages (or send new ones)
-
-The following **additional** features are implemented:
-
-* [X] "Compose" new tweet icon is a floating action button on the timeline
-* [X] User can retweet on tweet details view
-* [X] User can favorite and unfavorite on tweet details view
 
 ## Video Walkthrough 
 
