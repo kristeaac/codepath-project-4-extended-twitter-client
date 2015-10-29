@@ -10,16 +10,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.fragments.ComposeTweetFragment;
 import com.codepath.apps.twitter.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitter.fragments.MentionsTimelineFragment;
+import com.codepath.apps.twitter.fragments.TweetListFragment;
 
 
 public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener {
     private ComposeTweetFragment composeTweetFragment;
+    private ViewPager vpPager;
+    private TweetsPagerAdapter aPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +44,9 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
             }
         });
 
-        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
-        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        vpPager = (ViewPager) findViewById(R.id.viewpager);
+        aPager = new TweetsPagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(aPager);
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabStrip.setViewPager(vpPager);
     }
@@ -51,6 +56,12 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         if (composeTweetFragment != null) {
             composeTweetFragment.dismiss();
         }
+        showLatestHomeTimelineTweets();
+    }
+
+    private void showLatestHomeTimelineTweets() {
+        vpPager.setCurrentItem(aPager.HOME_TIMELINE_POSITION);
+        aPager.homeTimelineFragment.populateWithLatestTweets();
     }
 
     @Override
@@ -61,6 +72,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
     public class TweetsPagerAdapter extends FragmentPagerAdapter {
         private final String[] tabTitles = {"Home", "Mentions"};
+        private final int HOME_TIMELINE_POSITION = 0;
+        private final int MENTIONS_TIMELINE_POSITION = 1;
+        private HomeTimelineFragment homeTimelineFragment;
+        private MentionsTimelineFragment mentionsTimelineFragment;
 
         public TweetsPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -68,13 +83,27 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 0) {
+            if (position == HOME_TIMELINE_POSITION) {
                 return new HomeTimelineFragment();
-            } else if (position == 1) {
+            } else if (position == MENTIONS_TIMELINE_POSITION) {
                 return new MentionsTimelineFragment();
             } else {
                 return null;
             }
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            TweetListFragment tweetListFragment = (TweetListFragment) super.instantiateItem(container, position);
+            switch (position) {
+                case HOME_TIMELINE_POSITION:
+                    homeTimelineFragment = (HomeTimelineFragment) tweetListFragment;
+                    break;
+                case MENTIONS_TIMELINE_POSITION:
+                    mentionsTimelineFragment = (MentionsTimelineFragment) tweetListFragment;
+                    break;
+            }
+            return tweetListFragment;
         }
 
         @Override
@@ -86,6 +115,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         public CharSequence getPageTitle(int position) {
             return tabTitles[position];
         }
+
     }
 
 }

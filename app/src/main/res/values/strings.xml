@@ -17,5 +17,6 @@
     <string name="created_at_relative">10m</string>
     <string name="tweet_id">-1</string>
     <string name="profile_title">Profile</string>
+    <string name="compose_tweet_title">Compose Tweet</string>
 
 </resources>

@@ -2,8 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".ImageSearchActivity">
-    <item android:id="@+id/action_filters"
+    <item android:id="@+id/action_compose_tweet"
         android:orderInCategory="1"
+        android:title="@string/compose_tweet_title"
+        android:icon="@drawable/ic_add_circle_white_48dp"
+        app:showAsAction="always"/>
+    <item android:id="@+id/action_profile"
+        android:orderInCategory="2"
         android:title="@string/profile_title"
         android:icon="@drawable/ic_account_circle_white_48dp"
         app:showAsAction="always"/>
