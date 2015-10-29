@@ -2,33 +2,23 @@ package com.codepath.apps.twitter.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ListView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.twitter.R;
-import com.codepath.apps.twitter.TwitterApplication;
-import com.codepath.apps.twitter.TwitterClient;
-import com.codepath.apps.twitter.adapters.TweetsAdapter;
 import com.codepath.apps.twitter.fragments.ComposeTweetFragment;
-import com.codepath.apps.twitter.listeners.EndlessScrollListener;
-import com.codepath.apps.twitter.models.Tweet;
+import com.codepath.apps.twitter.fragments.HomeTimelineFragment;
+import com.codepath.apps.twitter.fragments.MentionsTimelineFragment;
 
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener {
-    private TwitterClient client;
-    private TweetsAdapter aTweets;
-    private List<Tweet> tweets;
-    private ListView lvTweets;
-    private SwipeRefreshLayout swipeContainer;
     private ComposeTweetFragment composeTweetFragment;
 
     @Override
@@ -50,77 +40,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
             }
         });
 
-        setupSwitchRefreshLayout();
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
-        tweets = new ArrayList<>();
-        aTweets = new TweetsAdapter(this, tweets);
-        lvTweets.setAdapter(aTweets);
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
-                Long sinceId = getOldestTweetId();
-                client.getOlderHomeTimeline(new TwitterClient.TimelineResponseHandler() {
-                    @Override
-                    public void onSuccess(List<Tweet> tweets) {
-                        aTweets.addAll(tweets.isEmpty() ? tweets : tweets.subList(1, tweets.size()));
-                    }
-
-                    @Override
-                    public void onFailure(Throwable error) {
-                        logError(error);
-                    }
-                }, sinceId);
-                return true;
-            }
-        });
-        client = TwitterApplication.getRestClient();
-        populateTimeline();
-    }
-
-    private Long getOldestTweetId() {
-        if (tweets.size() == 0) {
-            return 1L;
-        } else {
-            Tweet tweet = tweets.get(tweets.size() - 1);
-            return tweet.getId();
-        }
-    }
-
-    private void populateTimeline() {
-        client.getHomeTimeline(new TwitterClient.TimelineResponseHandler() {
-            @Override
-            public void onSuccess(List<Tweet> tweets) {
-                aTweets.clear();
-                TimelineActivity.this.tweets.addAll(tweets);
-                aTweets.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(Throwable error) {
-                swipeContainer.setRefreshing(false);
-                logError(error);
-            }
-        });
-    }
-
-    private void logError(Throwable error) {
-        Log.d("TIMELINE", "Failed to retrieve tweets", error);
-    }
-
-    private void setupSwitchRefreshLayout() {
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                populateTimeline();
-            }
-        });
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
+        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabStrip.setViewPager(vpPager);
     }
 
     @Override
@@ -128,8 +51,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         if (composeTweetFragment != null) {
             composeTweetFragment.dismiss();
         }
-        lvTweets.smoothScrollToPosition(0);
-        populateTimeline();
     }
 
     @Override
@@ -137,4 +58,34 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+        private final String[] tabTitles = {"Home", "Mentions"};
+
+        public TweetsPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new HomeTimelineFragment();
+            } else if (position == 1) {
+                return new MentionsTimelineFragment();
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+    }
+
 }
