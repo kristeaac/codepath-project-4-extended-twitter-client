@@ -16,5 +16,6 @@
     <string name="characters_left">140</string>
     <string name="created_at_relative">10m</string>
     <string name="tweet_id">-1</string>
+    <string name="profile_title">Profile</string>
 
 </resources>
