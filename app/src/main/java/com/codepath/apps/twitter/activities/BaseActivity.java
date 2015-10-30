@@ -1,8 +1,10 @@
 package com.codepath.apps.twitter.activities;
 
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +28,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        setupProfileMenuItem(menu);
+        setupSearchMenuItem(menu);
+        return true;
+    }
+
+    private void setupProfileMenuItem(Menu menu) {
         MenuItem miProfile = menu.findItem(R.id.action_profile);
         miProfile.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -49,10 +57,28 @@ public abstract class BaseActivity extends AppCompatActivity {
                 return true;
             }
         });
-        return true;
+    }
+
+    private void setupSearchMenuItem(Menu menu) {
+        MenuItem searchItem = menu.findItem(R.id.action_search_tweets);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                showSearchResults(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     protected abstract void showAuthenticatedUserProfile();
+
+    protected abstract void showSearchResults(String query);
 
     protected abstract String getTag();
 

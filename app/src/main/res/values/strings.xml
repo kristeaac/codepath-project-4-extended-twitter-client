@@ -26,5 +26,7 @@
     <string name="followers_count">42</string>
     <string name="followers_count_label">FOLLOWERS</string>
     <string name="favorites_count_label">FAVORITES</string>
+    <string name="search_tweets_title">Search</string>
+    <string name="title_activity_search">Search</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.codepath.apps.twitter.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -101,6 +102,13 @@ public class ProfileActivity extends BaseActivity {
     protected void showAuthenticatedUserProfile() {
         populateUserHeader(authenticatedUser);
         populateUserTimeline(authenticatedUser.getId());
+    }
+
+    @Override
+    protected void showSearchResults(String query) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(Extras.QUERY, query);
+        startActivity(intent);
     }
 
     @Override

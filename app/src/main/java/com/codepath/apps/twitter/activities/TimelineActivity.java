@@ -71,6 +71,13 @@ public class TimelineActivity extends BaseActivity implements ComposeTweetFragme
         startActivity(intent);
     }
 
+    @Override
+    protected void showSearchResults(String query) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(Extras.QUERY, query);
+        startActivity(intent);
+    }
+
     public class TweetsPagerAdapter extends FragmentPagerAdapter {
         private final String[] tabTitles = {"Home", "Mentions"};
         private final int HOME_TIMELINE_POSITION = 0;

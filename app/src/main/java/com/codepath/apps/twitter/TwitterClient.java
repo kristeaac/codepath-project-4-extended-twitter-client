@@ -6,6 +6,7 @@ import org.scribe.builder.api.TwitterApi;
 
 import android.content.Context;
 
+import com.codepath.apps.twitter.models.SearchResults;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.models.TwitterUser;
 import com.codepath.oauth.OAuthBaseClient;
@@ -103,6 +104,43 @@ public class TwitterClient extends OAuthBaseClient {
 					List<Tweet> tweets = mapper.readValue(responseBody, new TypeReference<List<Tweet>>() {
 					});
 					handler.onSuccess(tweets);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
+	public void searchTweets(String query, final SearchResultsResponseHandler handler) {
+		searchNewerTeets(handler, query, 1L);
+	}
+
+	public void searchNewerTeets(final SearchResultsResponseHandler handler, String query, Long sinceId) {
+		searchTweets(handler, query, sinceId, "since_id");
+	}
+
+	public void searchOlderTweets(final SearchResultsResponseHandler handler, String query, Long maxId) {
+		searchTweets(handler, query, maxId, "max_id");
+	}
+
+	private void searchTweets(final SearchResultsResponseHandler handler, String query, Long id, String paramName) {
+		String apiUrl = getApiUrl("search/tweets.json");
+		RequestParams params = new RequestParams();
+		params.put("q", query);
+		params.put("count", 25);
+		params.put(paramName, id);
+		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					SearchResults searchResults = mapper.readValue(responseBody, SearchResults.class);
+					handler.onSuccess(searchResults);
 				} catch (IOException e) {
 					handler.onFailure(e);
 				}
@@ -289,6 +327,14 @@ public class TwitterClient extends OAuthBaseClient {
 	public interface TweetResponseHandler {
 
 		void onSuccess(Tweet tweet);
+
+		void onFailure(Throwable error);
+
+	}
+
+	public interface SearchResultsResponseHandler {
+
+		void onSuccess(SearchResults searchResults);
 
 		void onFailure(Throwable error);
 
