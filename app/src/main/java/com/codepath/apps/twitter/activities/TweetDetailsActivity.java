@@ -1,5 +1,6 @@
 package com.codepath.apps.twitter.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class TweetDetailsActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener {
+public class TweetDetailsActivity extends BaseActivity implements ComposeTweetFragment.StatusUpdateListener {
     private static final String TAG = "TWEET_DETAILS";
     private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
     private static final SimpleDateFormat STRING_FORMATTER = new SimpleDateFormat("hh:mm a - dd MMM yyyy");
@@ -39,8 +40,6 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet_details);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         Long id = getIntent().getLongExtra(Extras.TWEET_ID, -1L);
         TwitterApplication.getRestClient().getStatus(id, new TwitterClient.TweetResponseHandler() {
             @Override
@@ -57,6 +56,18 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
                 Log.e(TAG, "Failed to fetch tweet", error);
             }
         });
+    }
+
+    @Override
+    protected void showAuthenticatedUserProfile() {
+        Intent intent = new Intent(TweetDetailsActivity.this, ProfileActivity.class);
+        intent.putExtra(Extras.USER_ID, authenticatedUser.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    protected String getTag() {
+        return TAG;
     }
 
     private void setupMedia(Tweet tweet) {
@@ -150,6 +161,14 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeTw
         tvTweetText.setText(Html.fromHtml(tweet.getText()), TextView.BufferType.SPANNABLE);
         ImageView ivUserPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
         TwitterUser user = tweet.getUser();
+        ivUserPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                intent.putExtra(Extras.USER_ID, tweet.getUser().getId());
+                startActivity(intent);
+            }
+        });
         Picasso.with(this).load(user.getProfileImageUrl()).into(ivUserPhoto);
         TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
         tvUserName.setText(user.getName());
