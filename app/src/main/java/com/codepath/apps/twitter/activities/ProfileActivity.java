@@ -36,6 +36,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onSuccess(TwitterUser user) {
                 populateUserHeader(user);
+                populateUserStats(user);
             }
 
             @Override
@@ -69,6 +70,20 @@ public class ProfileActivity extends BaseActivity {
         } else {
             setHeaderBackgroundColor(rlUserHeader);
         }
+    }
+
+    private void populateUserStats(TwitterUser user) {
+        TextView tvTweetsCount = (TextView) findViewById(R.id.tvTweetCount);
+        tvTweetsCount.setText(String.valueOf(user.getTweetCount()));
+
+        TextView tvFollowingCount = (TextView) findViewById(R.id.tvFollowingCount);
+        tvFollowingCount.setText(String.valueOf(user.getFriendsCount()));
+
+        TextView tvFollowersCount = (TextView) findViewById(R.id.tvFollowersCount);
+        tvFollowersCount.setText(String.valueOf(user.getFollowersCount()));
+
+        TextView tvFavoritesCount = (TextView) findViewById(R.id.tvFavoritesCount);
+        tvFavoritesCount.setText(String.valueOf(user.getFavoritesCount()));
     }
 
     private void setHeaderBackgroundColor(RelativeLayout rlUserHeader) {

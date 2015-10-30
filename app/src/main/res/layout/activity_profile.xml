@@ -66,14 +66,123 @@
             android:id="@+id/tvUserDescription"
             android:layout_below="@+id/tvUserScreenName"
             android:layout_centerHorizontal="true" />
+
     </RelativeLayout>
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tlUserFollowStats"
+        android:layout_below="@+id/rlUserHeader"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        android:gravity="center">
+
+        <TableRow>
+            <RelativeLayout
+                android:id="@+id/rlTweetCount"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:layout_margin="4dip"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvTweetCountLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tweet_count_label"
+                    android:textSize="10dp"/>
+
+                <TextView
+                    android:id="@+id/tvTweetCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTweetCountLabel"
+                    android:text="@string/tweet_count" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlFollowingCount"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:layout_margin="4dip"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvFollowingCountLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/following_count_label"
+                    android:textSize="10dp"/>
+
+                <TextView
+                    android:id="@+id/tvFollowingCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvFollowingCountLabel"
+                    android:text="@string/following_count" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlFollowersCount"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:layout_margin="4dip"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvFollowersCountLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/followers_count_label"
+                    android:textSize="10dp"/>
+
+                <TextView
+                    android:id="@+id/tvFollowersCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvFollowersCountLabel"
+                    android:text="@string/followers_count" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlFavoritesCount"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:layout_margin="4dip"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvFavoritesCountLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/favorites_count_label"
+                    android:textSize="10dp"/>
+
+                <TextView
+                    android:id="@+id/tvFavoritesCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvFavoritesCountLabel"
+                    android:text="@string/favorites_count" />
+
+            </RelativeLayout>
+
+        </TableRow>
+    </TableLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rlUserHeader"
+        android:layout_below="@+id/tlUserFollowStats"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/flContainer"></FrameLayout>
+        android:id="@+id/flContainer"/>
 
 </RelativeLayout>

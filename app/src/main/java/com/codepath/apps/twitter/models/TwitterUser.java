@@ -17,13 +17,15 @@ public class TwitterUser {
     private String profileBackgroundColor;
     @JsonProperty("profile_background_tile")
     private boolean profileBackgroundTile;
-    @JsonProperty("listed_count")
-    private int tweetCount;
     @JsonProperty("followers_count")
     private int followersCount;
     @JsonProperty("friends_count")
     private int friendsCount;
     private String description;
+    @JsonProperty("statuses_count")
+    private int tweetCount;
+    @JsonProperty("favourites_count")
+    private int favoritesCount;
 
     public Long getId() {
         return id;
@@ -111,5 +113,13 @@ public class TwitterUser {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getFavoritesCount() {
+        return favoritesCount;
+    }
+
+    public void setFavoritesCount(int favoritesCount) {
+        this.favoritesCount = favoritesCount;
     }
 }

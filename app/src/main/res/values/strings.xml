@@ -9,7 +9,7 @@
     <string name="tweet_text">Don\'t Have a Cow, Man!</string>
     <string name="created_at_long">7:51 AM - 26 OCT 2015</string>
     <string name="reweet_count">23</string>
-    <string name="favorites_count">42</string>
+    <string name="favorites_count">6</string>
     <string name="user_name">Bart Simpson</string>
     <string name="compose_tweet_hint">What\'s going on?</string>
     <string name="update_status">Tweet</string>
@@ -19,5 +19,12 @@
     <string name="profile_title">Profile</string>
     <string name="compose_tweet_title">Compose Tweet</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="tweet_count_label">TWEETS</string>
+    <string name="tweet_count">18</string>
+    <string name="following_count">13</string>
+    <string name="following_count_label">FOLLOWING</string>
+    <string name="followers_count">42</string>
+    <string name="followers_count_label">FOLLOWERS</string>
+    <string name="favorites_count_label">FAVORITES</string>
 
 </resources>
