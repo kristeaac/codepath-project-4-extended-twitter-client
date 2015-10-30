@@ -51,6 +51,8 @@ public class ProfileActivity extends BaseActivity {
     private void populateUserHeader(TwitterUser user) {
         ProfileActivity.this.twitterUser = user;
         getSupportActionBar().setTitle("@" + twitterUser.getScreenName());
+        TextView tvUserDescription = (TextView) findViewById(R.id.tvUserDescription);
+        tvUserDescription.setText(user.getDescription());
         ImageView ivUserPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
         ivUserPhoto.setImageResource(0);
         Picasso.with(getApplicationContext()).load(twitterUser.getProfileImageUrl()).into(ivUserPhoto);

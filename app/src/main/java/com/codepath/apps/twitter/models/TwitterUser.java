@@ -23,6 +23,7 @@ public class TwitterUser {
     private int followersCount;
     @JsonProperty("friends_count")
     private int friendsCount;
+    private String description;
 
     public Long getId() {
         return id;
@@ -102,5 +103,13 @@ public class TwitterUser {
 
     public void setFriendsCount(int friendsCount) {
         this.friendsCount = friendsCount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
