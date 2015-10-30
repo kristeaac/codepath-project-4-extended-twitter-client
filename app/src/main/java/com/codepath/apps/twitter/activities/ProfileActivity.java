@@ -3,9 +3,11 @@ package com.codepath.apps.twitter.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +16,8 @@ import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
 import com.codepath.apps.twitter.constants.Extras;
+import com.codepath.apps.twitter.fragments.FollowersListFragment;
+import com.codepath.apps.twitter.fragments.FollowingListFragment;
 import com.codepath.apps.twitter.fragments.UserTimelineFragment;
 import com.codepath.apps.twitter.models.TwitterUser;
 import com.squareup.picasso.Picasso;
@@ -73,15 +77,33 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
-    private void populateUserStats(TwitterUser user) {
+    private void populateUserStats(final TwitterUser user) {
         TextView tvTweetsCount = (TextView) findViewById(R.id.tvTweetCount);
         tvTweetsCount.setText(String.valueOf(user.getTweetCount()));
+        tvTweetsCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                populateUserTimeline(user.getId());
+            }
+        });
 
         TextView tvFollowingCount = (TextView) findViewById(R.id.tvFollowingCount);
         tvFollowingCount.setText(String.valueOf(user.getFriendsCount()));
+        tvFollowingCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                populateFollowingList(user.getId());
+            }
+        });
 
         TextView tvFollowersCount = (TextView) findViewById(R.id.tvFollowersCount);
         tvFollowersCount.setText(String.valueOf(user.getFollowersCount()));
+        tvFollowersCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                populateFollowersList(user.getId());
+            }
+        });
 
         TextView tvFavoritesCount = (TextView) findViewById(R.id.tvFavoritesCount);
         tvFavoritesCount.setText(String.valueOf(user.getFavoritesCount()));
@@ -92,9 +114,20 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void populateUserTimeline(Long userId) {
-        UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(userId);
+        showFragment(UserTimelineFragment.newInstance(userId));
+    }
+
+    private void populateFollowingList(Long userId) {
+        showFragment(FollowingListFragment.newInstance(userId));
+    }
+
+    private void populateFollowersList(Long userId) {
+        showFragment(FollowersListFragment.newInstance(userId));
+    }
+
+    private void showFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flContainer, fragmentUserTimeline);
+        ft.replace(R.id.flContainer, fragment);
         ft.commit();
     }
 

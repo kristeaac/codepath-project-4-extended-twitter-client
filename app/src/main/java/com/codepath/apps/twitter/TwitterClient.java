@@ -9,6 +9,7 @@ import android.content.Context;
 import com.codepath.apps.twitter.models.SearchResults;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.models.TwitterUser;
+import com.codepath.apps.twitter.models.UserListResults;
 import com.codepath.oauth.OAuthBaseClient;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -299,6 +300,47 @@ public class TwitterClient extends OAuthBaseClient {
 		});
 	}
 
+	public void getFollowersList(Long userId, final UserListResponseHandler handler) {
+		getUsersList(handler, userId, -1L, "followers/list.json");
+	}
+
+	public void getFollowersList(Long userId, Long cursor, final UserListResponseHandler handler) {
+		getUsersList(handler, userId, cursor, "followers/list.json");
+	}
+
+	public void getFollowingList(Long userId, final UserListResponseHandler handler) {
+		getUsersList(handler, userId, -1L, "friends/list.json");
+	}
+
+	public void getFollowingList(Long userId, Long cursor, final UserListResponseHandler handler) {
+		getUsersList(handler, userId, cursor, "friends/list.json");
+	}
+
+	private void getUsersList(final UserListResponseHandler handler, Long userId, Long cursor, String path) {
+		String apiUrl = getApiUrl(path);
+		RequestParams params = new RequestParams();
+		params.put("user_id", userId);
+		params.put("count", 25);
+		params.put("cursor", cursor);
+		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					UserListResults userListResults = mapper.readValue(responseBody, UserListResults.class);
+					handler.onSuccess(userListResults);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
 
 	public interface TimelineResponseHandler {
 
@@ -335,6 +377,14 @@ public class TwitterClient extends OAuthBaseClient {
 	public interface SearchResultsResponseHandler {
 
 		void onSuccess(SearchResults searchResults);
+
+		void onFailure(Throwable error);
+
+	}
+
+	public interface UserListResponseHandler {
+
+		void onSuccess(UserListResults userListResults);
 
 		void onFailure(Throwable error);
 

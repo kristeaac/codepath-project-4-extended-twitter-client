@@ -91,6 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/tweet_count_label"
+                    android:gravity="center"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -98,6 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvTweetCountLabel"
+                    android:gravity="center"
                     android:text="@string/tweet_count" />
 
             </RelativeLayout>
@@ -115,6 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/following_count_label"
+                    android:gravity="center"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -122,6 +125,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvFollowingCountLabel"
+                    android:gravity="center"
                     android:text="@string/following_count" />
 
             </RelativeLayout>
@@ -139,6 +143,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/followers_count_label"
+                    android:gravity="center"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -146,6 +151,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvFollowersCountLabel"
+                    android:gravity="center"
                     android:text="@string/followers_count" />
 
             </RelativeLayout>
@@ -163,6 +169,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/favorites_count_label"
+                    android:gravity="center"
                     android:textSize="10dp"/>
 
                 <TextView
@@ -170,6 +177,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvFavoritesCountLabel"
+                    android:gravity="center"
                     android:text="@string/favorites_count" />
 
             </RelativeLayout>
