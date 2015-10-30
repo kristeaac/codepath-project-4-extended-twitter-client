@@ -7,39 +7,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.twitter.R;
-import com.codepath.apps.twitter.TwitterApplication;
-import com.codepath.apps.twitter.TwitterClient;
 import com.codepath.apps.twitter.constants.Extras;
 import com.codepath.apps.twitter.fragments.ComposeTweetFragment;
 import com.codepath.apps.twitter.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitter.fragments.MentionsTimelineFragment;
 import com.codepath.apps.twitter.fragments.TweetListFragment;
-import com.codepath.apps.twitter.models.TwitterUser;
 
-
-public class TimelineActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener {
+public class TimelineActivity extends BaseActivity implements ComposeTweetFragment.StatusUpdateListener {
     private ComposeTweetFragment composeTweetFragment;
     private ViewPager vpPager;
     private TweetsPagerAdapter aPager;
-    private TwitterUser authenticatedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        ActionBar supportActionBar = getSupportActionBar();
-        supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
-        supportActionBar.setIcon(R.drawable.twitter_logo_white_48);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +47,11 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
     }
 
     @Override
+    protected String getTag() {
+        return "TIMELINE";
+    }
+
+    @Override
     public void onStatusUpdated() {
         if (composeTweetFragment != null) {
             composeTweetFragment.dismiss();
@@ -73,35 +65,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        MenuItem miProfile = menu.findItem(R.id.action_profile);
-        miProfile.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (authenticatedUser == null) {
-                    TwitterApplication.getRestClient().getAuthenticatedUser(new TwitterClient.TwitterUserResponseHandler() {
-                        @Override
-                        public void onSuccess(TwitterUser user) {
-                            authenticatedUser = user;
-                            showUserProfile();
-                        }
-
-                        @Override
-                        public void onFailure(Throwable error) {
-                            Log.e("TIMELINE", "Failed to get user's profile", error);
-                        }
-                    });
-                } else {
-                    showUserProfile();
-                }
-                return true;
-            }
-        });
-        return true;
-    }
-
-    private void showUserProfile() {
+    protected void showAuthenticatedUserProfile() {
         Intent intent = new Intent(TimelineActivity.this, ProfileActivity.class);
         intent.putExtra(Extras.USER_ID, authenticatedUser.getId());
         startActivity(intent);
