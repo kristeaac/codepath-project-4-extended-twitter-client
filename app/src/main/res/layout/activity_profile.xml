@@ -3,13 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:id="@+id/ivUserBackgroundImage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:scaleType="centerCrop"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/rlUserHeader" android:gravity="center_vertical">
+        android:id="@+id/rlUserHeader"
+        android:gravity="center_vertical">
 
         <com.makeramen.roundedimageview.RoundedImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,6 +34,7 @@
             app:riv_tile_mode="repeat"
             app:riv_oval="false"
             app:riv_border_color="#ffffff"
+            app:riv_border_width="2dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="12dp"/>
@@ -54,4 +65,5 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/flContainer"></FrameLayout>
+
 </RelativeLayout>

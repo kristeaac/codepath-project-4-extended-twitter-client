@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 
 public class ProfileActivity extends AppCompatActivity {
+    public static final String TAG = "PROFILE";
     private TwitterClient client;
     private TwitterUser twitterUser;
 
@@ -40,18 +41,27 @@ public class ProfileActivity extends AppCompatActivity {
                 ProfileActivity.this.twitterUser = user;
                 getSupportActionBar().setTitle("@" + twitterUser.getScreenName());
                 ImageView ivUserPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
-                Picasso.with(getApplicationContext()).load(user.getProfileImageUrl()).into(ivUserPhoto);
+                ivUserPhoto.setImageResource(0);
+                Picasso.with(getApplicationContext()).load(twitterUser.getProfileImageUrl()).into(ivUserPhoto);
                 TextView tvUserName = (TextView) findViewById(R.id.tvUserName);
-                tvUserName.setText(user.getName());
+                tvUserName.setText(twitterUser.getName());
                 TextView tvUserScreenName = (TextView) findViewById(R.id.tvUserScreenName);
-                tvUserScreenName.setText("@" + user.getScreenName());
-                RelativeLayout rlUserHeader = (RelativeLayout) findViewById(R.id.rlUserHeader);
-                rlUserHeader.setBackgroundColor(Color.parseColor("#" + user.getProfileBackgroundColor()));
+                tvUserScreenName.setText("@" + twitterUser.getScreenName());
+                final RelativeLayout rlUserHeader = (RelativeLayout) findViewById(R.id.rlUserHeader);
+                final String backgroundImageUrl = twitterUser.getProfileBackgroundImageUrl();
+                Log.d(TAG, "backgroundImageUrl=" + backgroundImageUrl);
+                ImageView ivUserBackgroundImage = (ImageView) findViewById(R.id.ivUserBackgroundImage);
+                ivUserBackgroundImage.setImageResource(0);
+                if (backgroundImageUrl != null && backgroundImageUrl != "") {
+                    Picasso.with(getApplicationContext()).load(backgroundImageUrl).into(ivUserBackgroundImage);
+                } else {
+                    setHeaderBackgroundColor(rlUserHeader);
+                }
             }
 
             @Override
             public void onFailure(Throwable error) {
-                Log.e("PROFILE", "Failed to retrieve user profile", error);
+                Log.e(TAG, "Failed to retrieve user profile", error);
             }
         });
         if (savedInstanceState == null) {
@@ -60,6 +70,10 @@ public class ProfileActivity extends AppCompatActivity {
             ft.replace(R.id.flContainer, fragmentUserTimeline);
             ft.commit();
         }
+    }
+
+    private void setHeaderBackgroundColor(RelativeLayout rlUserHeader) {
+        rlUserHeader.setBackgroundColor(Color.parseColor("#" + twitterUser.getProfileBackgroundColor()));
     }
 
     @Override
