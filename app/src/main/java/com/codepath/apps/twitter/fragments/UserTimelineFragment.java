@@ -18,8 +18,8 @@ public class UserTimelineFragment extends TweetListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        populateWithLatestTweets();
         userId = getArguments().getLong(Extras.USER_ID);
+        populateWithLatestTweets();
     }
 
     public static UserTimelineFragment newInstance(Long userId) {

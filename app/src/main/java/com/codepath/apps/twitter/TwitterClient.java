@@ -115,9 +115,20 @@ public class TwitterClient extends OAuthBaseClient {
 		});
 	}
 
-	public void getProfile(final TwitterUserResponseHandler handler) {
+	public void getAuthenticatedUser(final TwitterUserResponseHandler handler) {
 		String apiUrl = getApiUrl("account/verify_credentials.json");
-		getClient().get(apiUrl, new AsyncHttpResponseHandler() {
+		getUser(handler, apiUrl, null);
+	}
+
+	public void getUser(Long userId, final TwitterUserResponseHandler handler) {
+		String apiUrl = getApiUrl("users/show.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id", userId);
+		getUser(handler, apiUrl, params);
+	}
+
+	private void getUser(final TwitterUserResponseHandler handler, String apiUrl, RequestParams params) {
+		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 				ObjectMapper mapper = new ObjectMapper();

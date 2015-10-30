@@ -80,7 +80,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeTweetF
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (authenticatedUser == null) {
-                    TwitterApplication.getRestClient().getProfile(new TwitterClient.TwitterUserResponseHandler() {
+                    TwitterApplication.getRestClient().getAuthenticatedUser(new TwitterClient.TwitterUserResponseHandler() {
                         @Override
                         public void onSuccess(TwitterUser user) {
                             authenticatedUser = user;

@@ -44,7 +44,7 @@ public class ComposeTweetFragment extends DialogFragment {
 
     private void setupUserDetails(final View view) {
         client = TwitterApplication.getRestClient();
-        client.getProfile(new TwitterClient.TwitterUserResponseHandler() {
+        client.getAuthenticatedUser(new TwitterClient.TwitterUserResponseHandler() {
             @Override
             public void onSuccess(TwitterUser user) {
                 TextView tvUserName = (TextView) view.findViewById(R.id.tvUserName);
