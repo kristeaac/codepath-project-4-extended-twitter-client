@@ -77,6 +77,44 @@ public class TwitterClient extends OAuthBaseClient {
 		});
 	}
 
+	public void getUserTimeline(Long userId, final TimelineResponseHandler handler) {
+		getNewerUserTimeline(handler, userId, 1L);
+	}
+
+	public void getNewerUserTimeline(final TimelineResponseHandler handler, Long userId, Long sinceId) {
+		getUserTimeline(handler, userId, sinceId, "since_id");
+	}
+
+	public void getOlderUserTimeline(final TimelineResponseHandler handler, Long userId, Long maxId) {
+		getUserTimeline(handler, userId, maxId, "max_id");
+	}
+
+	private void getUserTimeline(final TimelineResponseHandler handler, Long userId, Long id, String paramName) {
+		String apiUrl = getApiUrl("statuses/user_timeline.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id", userId);
+		params.put("count", 25);
+		params.put(paramName, id);
+		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					List<Tweet> tweets = mapper.readValue(responseBody, new TypeReference<List<Tweet>>() {
+					});
+					handler.onSuccess(tweets);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
 	public void getProfile(final TwitterUserResponseHandler handler) {
 		String apiUrl = getApiUrl("account/verify_credentials.json");
 		getClient().get(apiUrl, new AsyncHttpResponseHandler() {
