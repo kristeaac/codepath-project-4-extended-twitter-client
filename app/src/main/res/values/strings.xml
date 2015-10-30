@@ -28,5 +28,7 @@
     <string name="favorites_count_label">FAVORITES</string>
     <string name="search_tweets_title">Search</string>
     <string name="title_activity_search">Search</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="follow">Follow</string>
 
 </resources>

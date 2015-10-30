@@ -1,11 +1,13 @@
 package com.codepath.apps.twitter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
 
 import android.content.Context;
 
+import com.codepath.apps.twitter.models.FriendLookupResult;
 import com.codepath.apps.twitter.models.SearchResults;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.models.TwitterUser;
@@ -341,6 +343,76 @@ public class TwitterClient extends OAuthBaseClient {
 		});
 	}
 
+	public void lookupFriends(List<Long> userIds, final FriendLookupResponseHandler handler) {
+		String apiUrl = getApiUrl("friendships/lookup.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id", StringUtils.join(userIds, ","));
+		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					List<FriendLookupResult> results = mapper.readValue(responseBody, new TypeReference<List<FriendLookupResult>>(){});
+					handler.onSuccess(results);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
+	public void follow(Long userId, final TwitterUserResponseHandler handler) {
+		String apiUrl = getApiUrl("friendships/create.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id", userId);
+		params.put("follow", true);
+		getClient().post(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					TwitterUser user = mapper.readValue(responseBody, TwitterUser.class);
+					handler.onSuccess(user);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
+	public void unfollow(Long userId, final TwitterUserResponseHandler handler) {
+		String apiUrl = getApiUrl("friendships/destroy.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id", userId);
+		getClient().post(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					TwitterUser user = mapper.readValue(responseBody, TwitterUser.class);
+					handler.onSuccess(user);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
 
 	public interface TimelineResponseHandler {
 
@@ -385,6 +457,14 @@ public class TwitterClient extends OAuthBaseClient {
 	public interface UserListResponseHandler {
 
 		void onSuccess(UserListResults userListResults);
+
+		void onFailure(Throwable error);
+
+	}
+
+	public interface FriendLookupResponseHandler {
+
+		void onSuccess(List<FriendLookupResult> results);
 
 		void onFailure(Throwable error);
 

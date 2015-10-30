@@ -43,8 +43,8 @@ public class ProfileActivity extends BaseActivity {
         client.getUser(userId, new TwitterClient.TwitterUserResponseHandler() {
             @Override
             public void onSuccess(TwitterUser user) {
-                populateUserHeader(user);
-                populateUserStats(user);
+                twitterUser = user;
+                populateUserDetails(twitterUser);
             }
 
             @Override
@@ -136,8 +136,13 @@ public class ProfileActivity extends BaseActivity {
 
     @Override
     protected void showAuthenticatedUserProfile() {
-        populateUserHeader(authenticatedUser);
-        populateUserTimeline(authenticatedUser.getId());
+        populateUserDetails(authenticatedUser);
+    }
+
+    private void populateUserDetails(TwitterUser user) {
+        populateUserHeader(user);
+        populateUserTimeline(user.getId());
+        populateUserStats(user);
     }
 
     @Override
