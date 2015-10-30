@@ -2,7 +2,7 @@
 
 Simple Tweets is an android app that allows a user to view home and mentions timelines, view user profiles with user timelines, as well as compose and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: 6 hours spent in total
+Time spent: 7 hours spent in total
 
 ## User Stories
 
@@ -34,6 +34,10 @@ The following **optional** features are implemented:
 The following **bonus** features are implemented:
 
 * [ ] User can view their direct messages (or send new ones)
+
+The following **additional** features are implemented:
+
+* [X] User can view favorites timeline through the profile
 
 ## Video Walkthrough 
 
