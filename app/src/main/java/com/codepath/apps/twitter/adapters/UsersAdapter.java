@@ -26,7 +26,6 @@ public class UsersAdapter extends ArrayAdapter<TwitterUser> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d("USER", "position=" + position);
         final TwitterUser user = getItem(position);
         final ViewHolder viewHolder;
         if (convertView == null) {

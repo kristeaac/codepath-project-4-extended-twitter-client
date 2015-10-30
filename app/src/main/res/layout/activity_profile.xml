@@ -100,6 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvTweetCountLabel"
                     android:gravity="center"
+                    android:textColor="#0084B4"
                     android:text="@string/tweet_count" />
 
             </RelativeLayout>
@@ -126,6 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvFollowingCountLabel"
                     android:gravity="center"
+                    android:textColor="#0084B4"
                     android:text="@string/following_count" />
 
             </RelativeLayout>
@@ -152,6 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvFollowersCountLabel"
                     android:gravity="center"
+                    android:textColor="#0084B4"
                     android:text="@string/followers_count" />
 
             </RelativeLayout>
@@ -178,6 +181,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvFavoritesCountLabel"
                     android:gravity="center"
+                    android:textColor="#0084B4"
                     android:text="@string/favorites_count" />
 
             </RelativeLayout>

@@ -22,9 +22,12 @@ import com.codepath.apps.twitter.fragments.UserTimelineFragment;
 import com.codepath.apps.twitter.models.TwitterUser;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
+
 
 public class ProfileActivity extends BaseActivity {
-    public static final String TAG = "PROFILE";
+    private static final String TAG = "PROFILE";
+    private static final NumberFormat NUMBER_FORMATTTER = NumberFormat.getIntegerInstance();
     private TwitterClient client;
     private TwitterUser twitterUser;
 
@@ -79,7 +82,7 @@ public class ProfileActivity extends BaseActivity {
 
     private void populateUserStats(final TwitterUser user) {
         TextView tvTweetsCount = (TextView) findViewById(R.id.tvTweetCount);
-        tvTweetsCount.setText(String.valueOf(user.getTweetCount()));
+        tvTweetsCount.setText(NUMBER_FORMATTTER.format(user.getTweetCount()));
         tvTweetsCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +91,7 @@ public class ProfileActivity extends BaseActivity {
         });
 
         TextView tvFollowingCount = (TextView) findViewById(R.id.tvFollowingCount);
-        tvFollowingCount.setText(String.valueOf(user.getFriendsCount()));
+        tvFollowingCount.setText(NUMBER_FORMATTTER.format(user.getFriendsCount()));
         tvFollowingCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +100,7 @@ public class ProfileActivity extends BaseActivity {
         });
 
         TextView tvFollowersCount = (TextView) findViewById(R.id.tvFollowersCount);
-        tvFollowersCount.setText(String.valueOf(user.getFollowersCount()));
+        tvFollowersCount.setText(NUMBER_FORMATTTER.format(user.getFollowersCount()));
         tvFollowersCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,7 +109,7 @@ public class ProfileActivity extends BaseActivity {
         });
 
         TextView tvFavoritesCount = (TextView) findViewById(R.id.tvFavoritesCount);
-        tvFavoritesCount.setText(String.valueOf(user.getFavoritesCount()));
+        tvFavoritesCount.setText(NUMBER_FORMATTTER.format(user.getFavoritesCount()));
     }
 
     private void setHeaderBackgroundColor(RelativeLayout rlUserHeader) {
