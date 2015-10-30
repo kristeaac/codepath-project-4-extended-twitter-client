@@ -25,8 +25,9 @@ public class TwitterUser {
     @JsonProperty("statuses_count")
     private int tweetCount;
     @JsonProperty("favourites_count")
+    private int userFavoritedCount;
+    @JsonProperty("favorite_count")
     private int favoritesCount;
-    private boolean following;
 
     public Long getId() {
         return id;
@@ -116,15 +117,15 @@ public class TwitterUser {
         this.description = description;
     }
 
+    public int getUserFavoritedCount() {
+        return userFavoritedCount;
+    }
+
+    public void setUserFavoritedCount(int userFavoritedCount) {
+        this.userFavoritedCount = userFavoritedCount;
+    }
+
     public int getFavoritesCount() {
         return favoritesCount;
-    }
-
-    public void setFavoritesCount(int favoritesCount) {
-        this.favoritesCount = favoritesCount;
-    }
-
-    public boolean isFollowing() {
-        return following;
     }
 }

@@ -37,11 +37,11 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	public void getNewerHomeTimeline(final TimelineResponseHandler handler, Long sinceId) {
-		getTimeline(handler, sinceId, "since_id", "home_timeline");
+		getTimeline(handler, sinceId, "since_id", "statuses/home_timeline.json", null);
 	}
 
 	public void getOlderHomeTimeline(final TimelineResponseHandler handler, Long maxId) {
-		getTimeline(handler, maxId, "max_id", "home_timeline");
+		getTimeline(handler, maxId, "max_id", "statuses/home_timeline.json", null);
 	}
 
 	public void getMentionsTimeline(TimelineResponseHandler handler) {
@@ -49,17 +49,30 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	public void getNewerMentionsTimeline(final TimelineResponseHandler handler, Long sinceId) {
-		getTimeline(handler, sinceId, "since_id", "mentions_timeline");
+		getTimeline(handler, sinceId, "since_id", "statuses/mentions_timeline.json", null);
 	}
 
 	public void getOlderMentionsTimeline(final TimelineResponseHandler handler, Long maxId) {
-		getTimeline(handler, maxId, "max_id", "mentions_timeline");
+		getTimeline(handler, maxId, "max_id", "statuses/mentions_timeline.json", null);
 	}
 
-	public void getTimeline(final TimelineResponseHandler handler, Long id, String paramName, String timelinePath) {
-		String apiUrl = getApiUrl(String.format("statuses/%s.json", timelinePath));
+	public void getFavoritesTimeline(Long userId, TimelineResponseHandler handler) {
+		getNewerFavoritesTimeline(userId, handler, 1L);
+	}
+
+	public void getNewerFavoritesTimeline(Long userId, final TimelineResponseHandler handler, Long sinceId) {
+		getTimeline(handler, sinceId, "since_id", "favorites/list.json", userId);
+	}
+
+	public void getOlderFavoritesTimeline(Long userId, final TimelineResponseHandler handler, Long maxId) {
+		getTimeline(handler, maxId, "max_id", "favorites/list.json", userId);
+	}
+
+	public void getTimeline(final TimelineResponseHandler handler, Long id, String paramName, String timelinePath, Long userId) {
+		String apiUrl = getApiUrl(timelinePath);
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
+		params.put("user_id", userId);
 		params.put(paramName, id);
 		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
 			@Override

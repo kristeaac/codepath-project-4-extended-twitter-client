@@ -16,6 +16,7 @@ import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
 import com.codepath.apps.twitter.constants.Extras;
+import com.codepath.apps.twitter.fragments.FavoritesTimelineFragment;
 import com.codepath.apps.twitter.fragments.FollowersListFragment;
 import com.codepath.apps.twitter.fragments.FollowingListFragment;
 import com.codepath.apps.twitter.fragments.UserTimelineFragment;
@@ -109,7 +110,13 @@ public class ProfileActivity extends BaseActivity {
         });
 
         TextView tvFavoritesCount = (TextView) findViewById(R.id.tvFavoritesCount);
-        tvFavoritesCount.setText(NUMBER_FORMATTTER.format(user.getFavoritesCount()));
+        tvFavoritesCount.setText(NUMBER_FORMATTTER.format(user.getUserFavoritedCount()));
+        tvFavoritesCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                populateFavoritesTimeline(user.getId());
+            }
+        });
     }
 
     private void setHeaderBackgroundColor(RelativeLayout rlUserHeader) {
@@ -126,6 +133,10 @@ public class ProfileActivity extends BaseActivity {
 
     private void populateFollowersList(Long userId) {
         showFragment(FollowersListFragment.newInstance(userId));
+    }
+
+    private void populateFavoritesTimeline(Long userId) {
+        showFragment(FavoritesTimelineFragment.newInstance(userId));
     }
 
     private void showFragment(Fragment fragment) {
