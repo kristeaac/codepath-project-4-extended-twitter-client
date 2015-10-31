@@ -225,7 +225,6 @@ public class ProfileActivity extends BaseActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            Log.d("PROFILE", "position=" + position);
             return tabTitles[position];
         }
 

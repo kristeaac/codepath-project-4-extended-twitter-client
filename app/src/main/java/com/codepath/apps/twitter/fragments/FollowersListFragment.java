@@ -18,7 +18,6 @@ public class FollowersListFragment extends UserListFragment {
     private TwitterClient client;
     private Long userId;
     private Long nextCursor;
-    private OnUserProfileClickListener listener;
 
     public static FollowersListFragment newInstance(Long userId) {
         FollowersListFragment fragment = new FollowersListFragment();
