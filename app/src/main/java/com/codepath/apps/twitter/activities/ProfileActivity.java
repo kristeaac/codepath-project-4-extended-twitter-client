@@ -142,6 +142,11 @@ public class ProfileActivity extends BaseActivity {
         return TAG;
     }
 
+    @Override
+    public void onUserProfileClick(TwitterUser user) {
+        populateUserDetails(user);
+    }
+
     public class ProfilePagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.ViewTabProvider {
         private final String[] tabTitles = {"Tweets", "Following", "Followers", "Favorites"};
         private final int USER_TIMELINE_POSITION = 0;

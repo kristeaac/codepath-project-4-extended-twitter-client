@@ -6,7 +6,9 @@ import android.util.Log;
 
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
+import com.codepath.apps.twitter.adapters.UsersAdapter;
 import com.codepath.apps.twitter.constants.Extras;
+import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
 import com.codepath.apps.twitter.models.TwitterUser;
 import com.codepath.apps.twitter.models.UserListResults;
 
@@ -16,6 +18,7 @@ public class FollowersListFragment extends UserListFragment {
     private TwitterClient client;
     private Long userId;
     private Long nextCursor;
+    private OnUserProfileClickListener listener;
 
     public static FollowersListFragment newInstance(Long userId) {
         FollowersListFragment fragment = new FollowersListFragment();

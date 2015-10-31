@@ -9,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.ListView;
 
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.adapters.UsersAdapter;
 import com.codepath.apps.twitter.listeners.EndlessScrollListener;
+import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
 import com.codepath.apps.twitter.models.TwitterUser;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public abstract class UserListFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         users = new ArrayList<>();
-        aUsers = new UsersAdapter(getActivity(), users);
+        aUsers = new UsersAdapter(getActivity(), users, (OnUserProfileClickListener) getActivity());
     }
 
     private void setupSwitchRefreshLayout(View view) {

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
+import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
 import com.codepath.apps.twitter.models.FriendLookupResult;
 import com.codepath.apps.twitter.models.TwitterUser;
 import com.squareup.picasso.Picasso;
@@ -24,11 +25,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class UsersAdapter extends ArrayAdapter<TwitterUser> {
+    private static final String TAG = "USER_ADAPTER";
+    private OnUserProfileClickListener listener;
 
-    public static final String TAG = "USER_ADAPTER";
-
-    public UsersAdapter(Context context, List<TwitterUser> users) {
+    public UsersAdapter(Context context, List<TwitterUser> users, OnUserProfileClickListener listener) {
         super(context, android.R.layout.simple_list_item_1, users);
+        this.listener = listener;
     }
 
     @Override
@@ -61,6 +63,14 @@ public class UsersAdapter extends ArrayAdapter<TwitterUser> {
         });
         ImageView ivUserPhoto = (ImageView) convertView.findViewById(R.id.ivUserPhoto);
         ivUserPhoto.setImageResource(0);
+        ivUserPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onUserProfileClick(user);
+                }
+            }
+        });
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivUserPhoto);
         TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
         tvUserName.setText(user.getName());

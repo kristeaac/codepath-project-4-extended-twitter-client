@@ -1,5 +1,6 @@
 package com.codepath.apps.twitter.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -13,10 +14,12 @@ import android.view.MenuItem;
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
+import com.codepath.apps.twitter.constants.Extras;
 import com.codepath.apps.twitter.fragments.ComposeTweetFragment;
+import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
 import com.codepath.apps.twitter.models.TwitterUser;
 
-public abstract class BaseActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener {
+public abstract class BaseActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener, OnUserProfileClickListener {
     private ComposeTweetFragment composeTweetFragment;
     protected TwitterUser authenticatedUser;
 
@@ -35,6 +38,13 @@ public abstract class BaseActivity extends AppCompatActivity implements ComposeT
         setupSearchMenuItem(menu);
         setupComposeTweetMenuItem(menu);
         return true;
+    }
+
+    @Override
+    public void onUserProfileClick(TwitterUser user) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(Extras.USER_ID, user.getId());
+        startActivity(intent);
     }
 
     private void setupComposeTweetMenuItem(Menu menu) {

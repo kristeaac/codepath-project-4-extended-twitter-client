@@ -18,6 +18,7 @@ import com.codepath.apps.twitter.activities.ProfileActivity;
 import com.codepath.apps.twitter.activities.TimelineActivity;
 import com.codepath.apps.twitter.activities.TweetDetailsActivity;
 import com.codepath.apps.twitter.constants.Extras;
+import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
 import com.codepath.apps.twitter.models.Entities;
 import com.codepath.apps.twitter.models.Media;
 import com.codepath.apps.twitter.models.Tweet;
@@ -33,14 +34,17 @@ import java.util.List;
 public class TweetsAdapter extends ArrayAdapter<Tweet> {
     private static final PrettyTime PRETTY_TIME = new PrettyTime();
     private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
+    private OnUserProfileClickListener listener;
 
-    public TweetsAdapter(Context context, List<Tweet> tweets) {
+    public TweetsAdapter(Context context, List<Tweet> tweets, OnUserProfileClickListener listener) {
         super(context, android.R.layout.simple_list_item_1, tweets);
+        this.listener = listener;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Tweet tweet = getItem(position);
+        final TwitterUser user = tweet.getUser();
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
         }
@@ -54,12 +58,11 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         ivUserPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ProfileActivity.class);
-                intent.putExtra(Extras.USER_ID, tweet.getUser().getId());
-                getContext().startActivity(intent);
+                if (listener != null) {
+                    listener.onUserProfileClick(user);
+                }
             }
         });
-        TwitterUser user = tweet.getUser();
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivUserPhoto);
         TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
         tvUserName.setText(user.getName());

@@ -17,6 +17,7 @@ import com.codepath.apps.twitter.fragments.ComposeTweetFragment;
 import com.codepath.apps.twitter.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitter.fragments.MentionsTimelineFragment;
 import com.codepath.apps.twitter.fragments.TweetListFragment;
+import com.codepath.apps.twitter.models.TwitterUser;
 
 public class TimelineActivity extends BaseActivity {
     private ViewPager vpPager;

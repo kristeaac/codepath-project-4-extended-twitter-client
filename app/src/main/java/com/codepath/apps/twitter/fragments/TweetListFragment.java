@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.adapters.TweetsAdapter;
 import com.codepath.apps.twitter.listeners.EndlessScrollListener;
+import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
 import com.codepath.apps.twitter.models.Tweet;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public abstract class TweetListFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tweets = new ArrayList<>();
-        aTweets = new TweetsAdapter(getActivity(), tweets);
+        aTweets = new TweetsAdapter(getActivity(), tweets, (OnUserProfileClickListener) getActivity());
     }
 
     private void setupSwitchRefreshLayout(View view) {
