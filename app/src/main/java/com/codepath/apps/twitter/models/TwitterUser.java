@@ -26,8 +26,6 @@ public class TwitterUser {
     private int tweetCount;
     @JsonProperty("favourites_count")
     private int userFavoritedCount;
-    @JsonProperty("favorite_count")
-    private int favoritesCount;
 
     public Long getId() {
         return id;
@@ -125,7 +123,4 @@ public class TwitterUser {
         this.userFavoritedCount = userFavoritedCount;
     }
 
-    public int getFavoritesCount() {
-        return favoritesCount;
-    }
 }
