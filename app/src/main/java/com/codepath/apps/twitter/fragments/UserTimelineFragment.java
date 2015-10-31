@@ -32,6 +32,11 @@ public class UserTimelineFragment extends TweetListFragment {
 
     @Override
     public void populateWithLatestTweets() {
+        populateWithLatestTweets(userId);
+    }
+
+    public void populateWithLatestTweets(Long userId) {
+        this.userId = userId;
         client.getUserTimeline(userId, new TwitterClient.TimelineResponseHandler() {
             @Override
             public void onSuccess(List<Tweet> tweets) {

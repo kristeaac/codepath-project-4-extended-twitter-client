@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
@@ -95,69 +94,13 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
-//    private void populateUserStats(final TwitterUser user) {
-//        TextView tvTweetsCount = (TextView) findViewById(R.id.tvTweetCount);
-//        tvTweetsCount.setText(NUMBER_FORMATTTER.format(user.getTweetCount()));
-//        tvTweetsCount.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                populateUserTimeline(user.getId());
-//            }
-//        });
-//
-//        TextView tvFollowingCount = (TextView) findViewById(R.id.tvFollowingCount);
-//        tvFollowingCount.setText(NUMBER_FORMATTTER.format(user.getFriendsCount()));
-//        tvFollowingCount.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                populateFollowingList(user.getId());
-//            }
-//        });
-//
-//        TextView tvFollowersCount = (TextView) findViewById(R.id.tvFollowersCount);
-//        tvFollowersCount.setText(NUMBER_FORMATTTER.format(user.getFollowersCount()));
-//        tvFollowersCount.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                populateFollowersList(user.getId());
-//            }
-//        });
-//
-//        TextView tvFavoritesCount = (TextView) findViewById(R.id.tvFavoritesCount);
-//        tvFavoritesCount.setText(NUMBER_FORMATTTER.format(user.getUserFavoritedCount()));
-//        tvFavoritesCount.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                populateFavoritesTimeline(user.getId());
-//            }
-//        });
-//    }
-
     private void setHeaderBackgroundColor(RelativeLayout rlUserHeader) {
         rlUserHeader.setBackgroundColor(Color.parseColor("#" + twitterUser.getProfileBackgroundColor()));
     }
 
-    private void populateUserTimeline() {
+    private void populateUserTimeline(Long userId) {
         vpPager.setCurrentItem(aPager.USER_TIMELINE_POSITION);
-        aPager.userTimelineFragment.populateWithLatestTweets();
-    }
-
-    private void populateFollowingList(Long userId) {
-        showFragment(FollowingListFragment.newInstance(userId));
-    }
-
-    private void populateFollowersList(Long userId) {
-        showFragment(FollowersListFragment.newInstance(userId));
-    }
-
-    private void populateFavoritesTimeline(Long userId) {
-        showFragment(FavoritesTimelineFragment.newInstance(userId));
-    }
-
-    private void showFragment(Fragment fragment) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flContainer, fragment);
-        ft.commit();
+        aPager.userTimelineFragment.populateWithLatestTweets(userId);
     }
 
     @Override
@@ -168,8 +111,18 @@ public class ProfileActivity extends BaseActivity {
     private void populateUserDetails(TwitterUser user) {
         this.twitterUser = user;
         populateUserHeader(user);
-        populateUserTimeline();
-        //populateUserStats(user);
+        Long userId = user.getId();
+        populateUserTimeline(userId);
+        if (aPager.followingListFragment != null) {
+            aPager.followingListFragment.populateWithUsers(userId);
+        }
+        if (aPager.followersListFragment != null) {
+            aPager.followersListFragment.populateWithUsers(userId);
+        }
+        if (aPager.favoritesTimelineFragment != null) {
+            aPager.favoritesTimelineFragment.populateWithLatestTweets(userId);
+        }
+        aPager.setupStats(twitterUser);
     }
 
     @Override

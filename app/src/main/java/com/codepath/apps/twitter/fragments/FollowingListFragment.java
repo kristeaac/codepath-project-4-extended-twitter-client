@@ -35,6 +35,11 @@ public class FollowingListFragment extends UserListFragment {
 
     @Override
     public void populateWithUsers() {
+        populateWithUsers(userId);
+    }
+
+    public void populateWithUsers(Long userId) {
+        this.userId = userId;
         client.getFollowingList(userId, new TwitterClient.UserListResponseHandler() {
             @Override
             public void onSuccess(UserListResults userListResults) {
