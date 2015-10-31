@@ -71,6 +71,11 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void showLatestHomeTimelineTweets() {
+        startActivity(new Intent(this, TimelineActivity.class));
+    }
+
     private void populateUserHeader(TwitterUser user) {
         ProfileActivity.this.twitterUser = user;
         getSupportActionBar().setTitle("@" + twitterUser.getScreenName());

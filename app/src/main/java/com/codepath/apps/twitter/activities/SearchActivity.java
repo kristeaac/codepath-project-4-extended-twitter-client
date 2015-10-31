@@ -44,4 +44,9 @@ public class SearchActivity extends BaseActivity {
     protected String getTag() {
         return "SEARCH";
     }
+
+    @Override
+    protected void showLatestHomeTimelineTweets() {
+        startActivity(new Intent(this, TimelineActivity.class));
+    }
 }

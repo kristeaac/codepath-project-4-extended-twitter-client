@@ -18,8 +18,7 @@ import com.codepath.apps.twitter.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitter.fragments.MentionsTimelineFragment;
 import com.codepath.apps.twitter.fragments.TweetListFragment;
 
-public class TimelineActivity extends BaseActivity implements ComposeTweetFragment.StatusUpdateListener {
-    private ComposeTweetFragment composeTweetFragment;
+public class TimelineActivity extends BaseActivity {
     private ViewPager vpPager;
     private TweetsPagerAdapter aPager;
 
@@ -27,18 +26,6 @@ public class TimelineActivity extends BaseActivity implements ComposeTweetFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                composeTweetFragment = new ComposeTweetFragment();
-                composeTweetFragment.show(fragmentManager, "COMPOSE_TWEET");
-                composeTweetFragment.setListener(TimelineActivity.this);
-            }
-        });
-
         vpPager = (ViewPager) findViewById(R.id.viewpager);
         aPager = new TweetsPagerAdapter(getSupportFragmentManager());
         vpPager.setAdapter(aPager);
@@ -51,15 +38,7 @@ public class TimelineActivity extends BaseActivity implements ComposeTweetFragme
         return "TIMELINE";
     }
 
-    @Override
-    public void onStatusUpdated() {
-        if (composeTweetFragment != null) {
-            composeTweetFragment.dismiss();
-        }
-        showLatestHomeTimelineTweets();
-    }
-
-    private void showLatestHomeTimelineTweets() {
+    public void showLatestHomeTimelineTweets() {
         vpPager.setCurrentItem(aPager.HOME_TIMELINE_POSITION);
         aPager.homeTimelineFragment.populateWithLatestTweets();
     }

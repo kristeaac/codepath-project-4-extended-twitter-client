@@ -1,6 +1,7 @@
 package com.codepath.apps.twitter.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,9 +13,11 @@ import android.view.MenuItem;
 import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
+import com.codepath.apps.twitter.fragments.ComposeTweetFragment;
 import com.codepath.apps.twitter.models.TwitterUser;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements ComposeTweetFragment.StatusUpdateListener {
+    private ComposeTweetFragment composeTweetFragment;
     protected TwitterUser authenticatedUser;
 
     @Override
@@ -30,7 +33,30 @@ public abstract class BaseActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         setupProfileMenuItem(menu);
         setupSearchMenuItem(menu);
+        setupComposeTweetMenuItem(menu);
         return true;
+    }
+
+    private void setupComposeTweetMenuItem(Menu menu) {
+        MenuItem miComposeTweet = menu.findItem(R.id.action_compose_tweet);
+        miComposeTweet.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                composeTweetFragment = new ComposeTweetFragment();
+                composeTweetFragment.show(fragmentManager, "COMPOSE_TWEET");
+                composeTweetFragment.setListener(BaseActivity.this);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onStatusUpdated() {
+        if (composeTweetFragment != null) {
+            composeTweetFragment.dismiss();
+        }
+        showLatestHomeTimelineTweets();
     }
 
     private void setupProfileMenuItem(Menu menu) {
@@ -75,6 +101,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         });
     }
+
+    protected abstract void showLatestHomeTimelineTweets();
 
     protected abstract void showAuthenticatedUserProfile();
 
