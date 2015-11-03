@@ -11,13 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.codepath.apps.twitter.R;
-import com.codepath.apps.twitter.activities.ProfileActivity;
-import com.codepath.apps.twitter.activities.TimelineActivity;
 import com.codepath.apps.twitter.activities.TweetDetailsActivity;
 import com.codepath.apps.twitter.constants.Extras;
+import com.codepath.apps.twitter.listeners.OnTweetReplyClickListener;
 import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
 import com.codepath.apps.twitter.models.Entities;
 import com.codepath.apps.twitter.models.Media;
@@ -34,11 +32,13 @@ import java.util.List;
 public class TweetsAdapter extends ArrayAdapter<Tweet> {
     private static final PrettyTime PRETTY_TIME = new PrettyTime();
     private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
-    private OnUserProfileClickListener listener;
+    private OnUserProfileClickListener onUserProfileClickListener;
+    private OnTweetReplyClickListener onTweetReplyClickListener;
 
-    public TweetsAdapter(Context context, List<Tweet> tweets, OnUserProfileClickListener listener) {
+    public TweetsAdapter(Context context, List<Tweet> tweets, OnUserProfileClickListener onUserProfileClickListener, OnTweetReplyClickListener onTweetReplyClickListener) {
         super(context, android.R.layout.simple_list_item_1, tweets);
-        this.listener = listener;
+        this.onUserProfileClickListener = onUserProfileClickListener;
+        this.onTweetReplyClickListener = onTweetReplyClickListener;
     }
 
     @Override
@@ -58,8 +58,8 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         ivUserPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listener != null) {
-                    listener.onUserProfileClick(user);
+                if (onUserProfileClickListener != null) {
+                    onUserProfileClickListener.onUserProfileClick(user);
                 }
             }
         });
@@ -74,7 +74,15 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
         } catch (ParseException e) {
             Log.d("TWEET", "uh oh", e);
         }
-
+        ImageView ivReply = (ImageView) convertView.findViewById(R.id.ivReply);
+        ivReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onTweetReplyClickListener != null) {
+                    onTweetReplyClickListener.onTweetReplyClick(tweet);
+                }
+            }
+        });
         convertView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

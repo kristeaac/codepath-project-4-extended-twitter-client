@@ -112,7 +112,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ComposeT
         });
     }
 
-    protected abstract void showLatestHomeTimelineTweets();
+    public abstract void showLatestHomeTimelineTweets();
 
     protected abstract void showAuthenticatedUserProfile();
 

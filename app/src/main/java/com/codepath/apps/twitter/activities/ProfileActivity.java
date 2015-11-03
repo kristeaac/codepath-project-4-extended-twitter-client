@@ -72,7 +72,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @Override
-    protected void showLatestHomeTimelineTweets() {
+    public void showLatestHomeTimelineTweets() {
         startActivity(new Intent(this, TimelineActivity.class));
     }
 

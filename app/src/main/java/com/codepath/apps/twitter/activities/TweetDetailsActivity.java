@@ -196,10 +196,12 @@ public class TweetDetailsActivity extends BaseActivity implements ComposeTweetFr
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 composeTweetFragment = new ComposeTweetFragment();
                 composeTweetFragment.setInReplyToStatusId(tweet.getId());
+                composeTweetFragment.setInReplyToScreenName(tweet.getUser().getScreenName());
                 composeTweetFragment.setListener(new ComposeTweetFragment.StatusUpdateListener() {
                     @Override
                     public void onStatusUpdated() {
                         composeTweetFragment.dismiss();
+                        showLatestHomeTimelineTweets();
                     }
                 });
                 composeTweetFragment.show(fragmentManager, "COMPOSE_TWEET");
@@ -215,7 +217,7 @@ public class TweetDetailsActivity extends BaseActivity implements ComposeTweetFr
     }
 
     @Override
-    protected void showLatestHomeTimelineTweets() {
+    public void showLatestHomeTimelineTweets() {
         startActivity(new Intent(this, TimelineActivity.class));
     }
 

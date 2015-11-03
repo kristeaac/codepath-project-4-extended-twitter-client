@@ -3,6 +3,7 @@ package com.codepath.apps.twitter.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,19 +11,22 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.codepath.apps.twitter.R;
+import com.codepath.apps.twitter.activities.BaseActivity;
 import com.codepath.apps.twitter.adapters.TweetsAdapter;
 import com.codepath.apps.twitter.listeners.EndlessScrollListener;
+import com.codepath.apps.twitter.listeners.OnTweetReplyClickListener;
 import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
 import com.codepath.apps.twitter.models.Tweet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class TweetListFragment extends Fragment  {
+public abstract class TweetListFragment extends Fragment implements OnTweetReplyClickListener {
     private TweetsAdapter aTweets;
     private List<Tweet> tweets;
     private ListView lvTweets;
     private SwipeRefreshLayout swipeContainer;
+    private ComposeTweetFragment composeTweetFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -53,7 +57,23 @@ public abstract class TweetListFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tweets = new ArrayList<>();
-        aTweets = new TweetsAdapter(getActivity(), tweets, (OnUserProfileClickListener) getActivity());
+        aTweets = new TweetsAdapter(getActivity(), tweets, (OnUserProfileClickListener) getActivity(), this);
+    }
+
+    @Override
+    public void onTweetReplyClick(Tweet tweet) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        composeTweetFragment = new ComposeTweetFragment();
+        composeTweetFragment.setInReplyToStatusId(tweet.getId());
+        composeTweetFragment.setInReplyToScreenName(tweet.getUser().getScreenName());
+        composeTweetFragment.setListener(new ComposeTweetFragment.StatusUpdateListener() {
+            @Override
+            public void onStatusUpdated() {
+                composeTweetFragment.dismiss();
+                ((BaseActivity) getActivity()).showLatestHomeTimelineTweets();
+            }
+        });
+        composeTweetFragment.show(fragmentManager, "COMPOSE_TWEET");
     }
 
     private void setupSwitchRefreshLayout(View view) {

@@ -30,6 +30,7 @@ public class ComposeTweetFragment extends DialogFragment {
     private EditText etTweetText;
     private StatusUpdateListener listener;
     private Long inReplyToStatusId = null;
+    private String inReplyToScreenName = null;
 
     @Nullable
     @Override
@@ -63,9 +64,13 @@ public class ComposeTweetFragment extends DialogFragment {
     }
 
     private void setupCharacterLimit(View view) {
-        tvCharsLeft = (TextView) view.findViewById(R.id.tvCharsLeft);
-        tvCharsLeft.setText(String.valueOf(MAX_CHARS));
         etTweetText = (EditText) view.findViewById(R.id.etTweetText);
+        String text = "";
+        if (inReplyToScreenName != null) {
+            text = "@" + inReplyToScreenName + " ";
+            etTweetText.setText(text);
+            etTweetText.setSelection(text.length());
+        }
         etTweetText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(MAX_CHARS)});
         etTweetText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -84,6 +89,9 @@ public class ComposeTweetFragment extends DialogFragment {
                 // Do nothing.
             }
         });
+        int startingCount = MAX_CHARS - text.length();
+        tvCharsLeft = (TextView) view.findViewById(R.id.tvCharsLeft);
+        tvCharsLeft.setText(String.valueOf(startingCount));
     }
 
     public void setupTweetButton(View view) {
@@ -116,6 +124,10 @@ public class ComposeTweetFragment extends DialogFragment {
 
     public void setInReplyToStatusId(Long inReplyToStatusId) {
         this.inReplyToStatusId = inReplyToStatusId;
+    }
+
+    public void setInReplyToScreenName(String inReplyToScreenName) {
+        this.inReplyToScreenName = inReplyToScreenName;
     }
 
     public interface StatusUpdateListener {

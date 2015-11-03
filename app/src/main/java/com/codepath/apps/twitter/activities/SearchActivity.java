@@ -46,7 +46,7 @@ public class SearchActivity extends BaseActivity {
     }
 
     @Override
-    protected void showLatestHomeTimelineTweets() {
+    public void showLatestHomeTimelineTweets() {
         startActivity(new Intent(this, TimelineActivity.class));
     }
 
