@@ -37,12 +37,12 @@ public class TwitterClient extends OAuthBaseClient {
 //	public static final String REST_CONSUMER_SECRET = "KUR0VwjRVEzedSOXYdIfBNrt4DD8VVXwV89KqSkYCUe33QvIr2";
 //
 //	// app 3
-	public static final String REST_CONSUMER_KEY = "eGahMTZXjicHA3u0X7sfJj2Qn";
-	public static final String REST_CONSUMER_SECRET = "QqL2OvWOyLFPglBEXggLBhpPEQYzT1wlnO5dylalVs1lXeR63L";
+//	public static final String REST_CONSUMER_KEY = "eGahMTZXjicHA3u0X7sfJj2Qn";
+//	public static final String REST_CONSUMER_SECRET = "QqL2OvWOyLFPglBEXggLBhpPEQYzT1wlnO5dylalVs1lXeR63L";
 //
 //	// app 4
-//	public static final String REST_CONSUMER_KEY = "FgoIJdfeJnVm77u4ncq11mCYG";
-//	public static final String REST_CONSUMER_SECRET = "eu2MSE60EA6DLhL3UcfpVfYVTVWhluZTlfzsTiwWvTSkqDn4S7";
+	public static final String REST_CONSUMER_KEY = "FgoIJdfeJnVm77u4ncq11mCYG";
+	public static final String REST_CONSUMER_SECRET = "eu2MSE60EA6DLhL3UcfpVfYVTVWhluZTlfzsTiwWvTSkqDn4S7";
 
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);

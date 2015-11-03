@@ -118,7 +118,7 @@ public class TweetDetailsActivity extends BaseActivity implements ComposeTweetFr
     }
 
     public void setupFavoriteButton(final Tweet tweet) {
-        TextView tvFavoritesCount = (TextView) findViewById(R.id.tvFavoritesCount);
+        final TextView tvFavoritesCount = (TextView) findViewById(R.id.tvFavoritesCount);
         tvFavoritesCount.setText(String.valueOf(tweet.getFavoritesCount()));
         ivFavorite = (ImageView) findViewById(R.id.ivFavorites);
         if (tweet.isFavorited()) {
@@ -135,6 +135,7 @@ public class TweetDetailsActivity extends BaseActivity implements ComposeTweetFr
                         @Override
                         public void onSuccess(Tweet tweet) {
                             TweetDetailsActivity.this.tweet = tweet;
+                            tvFavoritesCount.setText(String.valueOf(tweet.getFavoritesCount()));
                             setupFavoriteButton(tweet);
                         }
 
@@ -148,6 +149,7 @@ public class TweetDetailsActivity extends BaseActivity implements ComposeTweetFr
                         @Override
                         public void onSuccess(Tweet tweet) {
                             TweetDetailsActivity.this.tweet = tweet;
+                            tvFavoritesCount.setText(String.valueOf(tweet.getFavoritesCount()));
                             setupFavoriteButton(tweet);
                         }
 
