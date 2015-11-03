@@ -30,11 +30,11 @@ public class UsersAdapter extends ArrayAdapter<TwitterUser> {
     private TwitterClient client;
     private Long authenticatedUserId;
 
-    public UsersAdapter(Context context, List<TwitterUser> users, OnUserProfileClickListener listener) {
+    public UsersAdapter(Context context, List<TwitterUser> users, OnUserProfileClickListener listener, Long authenticatedUserId) {
         super(context, android.R.layout.simple_list_item_1, users);
         this.listener = listener;
-        client = TwitterApplication.getRestClient();
-        this.authenticatedUserId = client.getAuthenticatedUser().getId();
+        this.authenticatedUserId = authenticatedUserId;
+        this.client = TwitterApplication.getRestClient();
     }
 
     @Override
@@ -53,14 +53,14 @@ public class UsersAdapter extends ArrayAdapter<TwitterUser> {
         }
         TextView tvUserDescription = (TextView) convertView.findViewById(R.id.tvUserDescription);
         tvUserDescription.setText(user.getDescription());
-        if (user.getId() == authenticatedUserId) {
+        if (user.getId().equals(authenticatedUserId)) {
             viewHolder.btnFollow.setVisibility(View.INVISIBLE);
         } else {
             client.lookupFriendship(authenticatedUserId, user.getId(), new TwitterClient.FriendshipLookupResponseHandler() {
                 @Override
                 public void onSuccess(FriendshipLookupResult result) {
                     FriendshipSource source = result.getRelationship().getSource();
-                    setupFollowButton(source.getId(), source.isFollowing(), viewHolder);
+                    setupFollowButton(user.getId(), source.isFollowing(), viewHolder);
                 }
 
                 @Override

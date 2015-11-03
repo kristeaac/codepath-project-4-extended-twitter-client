@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.codepath.apps.twitter.R;
+import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.adapters.UsersAdapter;
 import com.codepath.apps.twitter.listeners.EndlessScrollListener;
 import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
@@ -44,7 +45,7 @@ public abstract class UserListFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         users = new ArrayList<>();
-        aUsers = new UsersAdapter(getActivity(), users, (OnUserProfileClickListener) getActivity());
+        aUsers = new UsersAdapter(getActivity(), users, (OnUserProfileClickListener) getActivity(), TwitterApplication.getAuthenticatedUserId());
     }
 
     private void setupSwitchRefreshLayout(View view) {

@@ -26,24 +26,26 @@ import java.util.List;
 public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
 	public static final String REST_URL = "https://api.twitter.com/1.1";
-	public static final String REST_CONSUMER_KEY = "FgoIJdfeJnVm77u4ncq11mCYG";
-	public static final String REST_CONSUMER_SECRET = "eu2MSE60EA6DLhL3UcfpVfYVTVWhluZTlfzsTiwWvTSkqDn4S7";
 	public static final String REST_CALLBACK_URL = "oauth://cpsimpletweets"; // Change this (here and in manifest)
-	private TwitterUser authenticatedUser;
+
+	// app 1
+//	public static final String REST_CONSUMER_KEY = "iLFoYN2ROqxLueDCPPx4hwuhK";
+//	public static final String REST_CONSUMER_SECRET = "tt1RGzFwkRBNhwdIMsa5rIzKGs50VZaURIizMtX3fSCSKaaHUI";
+
+	// app 2
+//	public static final String REST_CONSUMER_KEY = "tZCW97ycECebfwE1qufdPlFhK";
+//	public static final String REST_CONSUMER_SECRET = "KUR0VwjRVEzedSOXYdIfBNrt4DD8VVXwV89KqSkYCUe33QvIr2";
+//
+//	// app 3
+	public static final String REST_CONSUMER_KEY = "eGahMTZXjicHA3u0X7sfJj2Qn";
+	public static final String REST_CONSUMER_SECRET = "QqL2OvWOyLFPglBEXggLBhpPEQYzT1wlnO5dylalVs1lXeR63L";
+//
+//	// app 4
+//	public static final String REST_CONSUMER_KEY = "FgoIJdfeJnVm77u4ncq11mCYG";
+//	public static final String REST_CONSUMER_SECRET = "eu2MSE60EA6DLhL3UcfpVfYVTVWhluZTlfzsTiwWvTSkqDn4S7";
 
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
-		getAuthenticatedUser(new TwitterUserResponseHandler() {
-			@Override
-			public void onSuccess(TwitterUser user) {
-				TwitterClient.this.authenticatedUser = user;
-			}
-
-			@Override
-			public void onFailure(Throwable error) {
-				Log.e("TWITTER_CLIENT", "Unabled to retrieve authenticated user", error);
-			}
-		});
 	}
 
 	public void getHomeTimeline(TimelineResponseHandler handler) {
@@ -418,6 +420,7 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	public void follow(Long userId, final TwitterUserResponseHandler handler) {
+		Log.d("CLIENT", "follow userId=" + userId);
 		String apiUrl = getApiUrl("friendships/create.json");
 		RequestParams params = new RequestParams();
 		params.put("user_id", userId);
@@ -442,6 +445,7 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 
 	public void unfollow(Long userId, final TwitterUserResponseHandler handler) {
+		Log.d("CLIENT", "unfollow userId=" + userId);
 		String apiUrl = getApiUrl("friendships/destroy.json");
 		RequestParams params = new RequestParams();
 		params.put("user_id", userId);
@@ -451,6 +455,7 @@ public class TwitterClient extends OAuthBaseClient {
 				ObjectMapper mapper = new ObjectMapper();
 				try {
 					TwitterUser user = mapper.readValue(responseBody, TwitterUser.class);
+					Log.d("CLIENT", "UNFOLLOW SUCCESS, userId=" + user.getName());
 					handler.onSuccess(user);
 				} catch (IOException e) {
 					handler.onFailure(e);
@@ -463,11 +468,6 @@ public class TwitterClient extends OAuthBaseClient {
 			}
 		});
 	}
-
-	public TwitterUser getAuthenticatedUser() {
-		return authenticatedUser;
-	}
-
 
 	public interface TimelineResponseHandler {
 

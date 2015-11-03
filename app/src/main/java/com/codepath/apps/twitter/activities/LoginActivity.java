@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
 
 import com.codepath.apps.twitter.R;
+import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
+import com.codepath.apps.twitter.models.TwitterUser;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
@@ -30,7 +31,22 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	// i.e Display application "homepage"
 	@Override
 	public void onLoginSuccess() {
-		Intent intent = new Intent(this, TimelineActivity.class);
+		getClient().getAuthenticatedUser(new TwitterClient.TwitterUserResponseHandler() {
+			@Override
+			public void onSuccess(TwitterUser user) {
+				TwitterApplication.setAuthenticatedUserId(user.getId());
+				showTimeline();
+			}
+
+			@Override
+			public void onFailure(Throwable error) {
+				showTimeline();
+			}
+		});
+	}
+
+	private void showTimeline() {
+		Intent intent = new Intent(LoginActivity.this, TimelineActivity.class);
 		startActivity(intent);
 	}
 
