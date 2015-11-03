@@ -6,8 +6,10 @@ import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.codepath.apps.twitter.models.FriendLookupResult;
+import com.codepath.apps.twitter.models.FriendshipLookupResult;
 import com.codepath.apps.twitter.models.SearchResults;
 import com.codepath.apps.twitter.models.Tweet;
 import com.codepath.apps.twitter.models.TwitterUser;
@@ -27,9 +29,21 @@ public class TwitterClient extends OAuthBaseClient {
 	public static final String REST_CONSUMER_KEY = "FgoIJdfeJnVm77u4ncq11mCYG";
 	public static final String REST_CONSUMER_SECRET = "eu2MSE60EA6DLhL3UcfpVfYVTVWhluZTlfzsTiwWvTSkqDn4S7";
 	public static final String REST_CALLBACK_URL = "oauth://cpsimpletweets"; // Change this (here and in manifest)
+	private TwitterUser authenticatedUser;
 
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
+		getAuthenticatedUser(new TwitterUserResponseHandler() {
+			@Override
+			public void onSuccess(TwitterUser user) {
+				TwitterClient.this.authenticatedUser = user;
+			}
+
+			@Override
+			public void onFailure(Throwable error) {
+				Log.e("TWITTER_CLIENT", "Unabled to retrieve authenticated user", error);
+			}
+		});
 	}
 
 	public void getHomeTimeline(TimelineResponseHandler handler) {
@@ -379,6 +393,30 @@ public class TwitterClient extends OAuthBaseClient {
 		});
 	}
 
+	public void lookupFriendship(Long sourceUserId, Long targetUserId, final FriendshipLookupResponseHandler handler) {
+		String apiUrl = getApiUrl("friendships/show.json");
+		RequestParams params = new RequestParams();
+		params.put("source_id", sourceUserId);
+		params.put("target_id", targetUserId);
+		getClient().get(apiUrl, params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					FriendshipLookupResult result = mapper.readValue(responseBody, FriendshipLookupResult.class);
+					handler.onSuccess(result);
+				} catch (IOException e) {
+					handler.onFailure(e);
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+				handler.onFailure(error);
+			}
+		});
+	}
+
 	public void follow(Long userId, final TwitterUserResponseHandler handler) {
 		String apiUrl = getApiUrl("friendships/create.json");
 		RequestParams params = new RequestParams();
@@ -424,6 +462,10 @@ public class TwitterClient extends OAuthBaseClient {
 				handler.onFailure(error);
 			}
 		});
+	}
+
+	public TwitterUser getAuthenticatedUser() {
+		return authenticatedUser;
 	}
 
 
@@ -478,6 +520,14 @@ public class TwitterClient extends OAuthBaseClient {
 	public interface FriendLookupResponseHandler {
 
 		void onSuccess(List<FriendLookupResult> results);
+
+		void onFailure(Throwable error);
+
+	}
+
+	public interface FriendshipLookupResponseHandler {
+
+		void onSuccess(FriendshipLookupResult result);
 
 		void onFailure(Throwable error);
 

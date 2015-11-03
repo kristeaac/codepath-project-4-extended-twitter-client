@@ -4,7 +4,6 @@ package com.codepath.apps.twitter.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +74,6 @@ public abstract class UserListFragment extends Fragment  {
     }
 
     public void addAll(List<TwitterUser> users) {
-        Log.d("USER_LIST", "adding " + users.size());
         aUsers.addAll(users);
         swipeContainer.setRefreshing(false);
     }

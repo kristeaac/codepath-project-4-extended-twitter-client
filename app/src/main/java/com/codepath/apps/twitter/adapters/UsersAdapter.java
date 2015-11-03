@@ -16,21 +16,25 @@ import com.codepath.apps.twitter.R;
 import com.codepath.apps.twitter.TwitterApplication;
 import com.codepath.apps.twitter.TwitterClient;
 import com.codepath.apps.twitter.listeners.OnUserProfileClickListener;
-import com.codepath.apps.twitter.models.FriendLookupResult;
+import com.codepath.apps.twitter.models.FriendshipLookupResult;
+import com.codepath.apps.twitter.models.FriendshipSource;
 import com.codepath.apps.twitter.models.TwitterUser;
 import com.squareup.picasso.Picasso;
 
 
-import java.util.Collections;
 import java.util.List;
 
 public class UsersAdapter extends ArrayAdapter<TwitterUser> {
     private static final String TAG = "USER_ADAPTER";
     private OnUserProfileClickListener listener;
+    private TwitterClient client;
+    private Long authenticatedUserId;
 
     public UsersAdapter(Context context, List<TwitterUser> users, OnUserProfileClickListener listener) {
         super(context, android.R.layout.simple_list_item_1, users);
         this.listener = listener;
+        client = TwitterApplication.getRestClient();
+        this.authenticatedUserId = client.getAuthenticatedUser().getId();
     }
 
     @Override
@@ -49,18 +53,22 @@ public class UsersAdapter extends ArrayAdapter<TwitterUser> {
         }
         TextView tvUserDescription = (TextView) convertView.findViewById(R.id.tvUserDescription);
         tvUserDescription.setText(user.getDescription());
-        TwitterApplication.getRestClient().lookupFriends(Collections.singletonList(user.getId()), new TwitterClient.FriendLookupResponseHandler() {
-            @Override
-            public void onSuccess(List<FriendLookupResult> results) {
-                FriendLookupResult result = results.get(0);
-                setupFollowButton(result.getId(), result.isFollowing(), viewHolder);
-            }
+        if (user.getId() == authenticatedUserId) {
+            viewHolder.btnFollow.setVisibility(View.INVISIBLE);
+        } else {
+            client.lookupFriendship(authenticatedUserId, user.getId(), new TwitterClient.FriendshipLookupResponseHandler() {
+                @Override
+                public void onSuccess(FriendshipLookupResult result) {
+                    FriendshipSource source = result.getRelationship().getSource();
+                    setupFollowButton(source.getId(), source.isFollowing(), viewHolder);
+                }
 
-            @Override
-            public void onFailure(Throwable error) {
-                Log.e("USER_ADAPTER", "Failed to lookup friend", error);
-            }
-        });
+                @Override
+                public void onFailure(Throwable error) {
+                    Log.e("USER_ADAPTER", "Failed to lookup friend", error);
+                }
+            });
+        }
         ImageView ivUserPhoto = (ImageView) convertView.findViewById(R.id.ivUserPhoto);
         ivUserPhoto.setImageResource(0);
         ivUserPhoto.setOnClickListener(new View.OnClickListener() {
